@@ -1,0 +1,30 @@
+{
+  "name": "LostInSpace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "postinstall": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --watch --mode=development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aliashafi/LostInSpace.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aliashafi/LostInSpace/issues"
+  },
+  "homepage": "https://github.com/aliashafi/LostInSpace#readme",
+  "dependencies": {
+    "gsap": "^2.1.3",
+    "three.js": "^0.77.1",
+    "webpack": "^4.41.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.9"
+  }
+}
