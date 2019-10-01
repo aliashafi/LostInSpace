@@ -1,11 +1,20 @@
-import SceneManager from './js/sceneManager'
-import * as THREE from 'three';
+import SceneManager from './js/sceneManager';
+// import * as THREE from 'three';
+// import OrbitControls from 'three-orbitcontrols';
+import { OrbitControls } from 'Three/examples/jsm/controls/OrbitControls.js';
+
 
 const canvas = document.getElementById("canvas");
 const sceneManager = new SceneManager(canvas);
 
 bindEventListeners();
 render();
+
+document.body.appendChild(sceneManager.renderer.domElement);
+const controls = new OrbitControls(sceneManager.camera, sceneManager.renderer.domElement);
+controls.addEventListener('change', () => sceneManager.renderer.render(sceneManager.scene, sceneManager.camera));
+
+
 
 function bindEventListeners() {
     window.onresize = resizeCanvas;
@@ -28,3 +37,5 @@ function render() {
     requestAnimationFrame(render);
     sceneManager.update();
 }
+
+

@@ -3,27 +3,25 @@ import * as THREE from 'three';
 
 function starSubjects(scene) {
 
-    let starGeo = new THREE.Geometry();
-    let stars
 
-    for (let i = 0; i < 6000; i++) {
-        let star = new THREE.Vector3(
-            Math.random() * 600 - 300,
-            Math.random() * 600 - 300,
-            Math.random() * 600 - 300
-        );
-        star.velocity = 0;
-        star.acceleration = 0.02;
-        starGeo.vertices.push(star);
+    var starsGeometry = new THREE.Geometry();
+
+    for (var i = 0; i < 10000; i++) {
+
+        var star = new THREE.Vector3();
+        star.x = THREE.Math.randFloatSpread(2000);
+        star.y = THREE.Math.randFloatSpread(2000);
+        star.z = THREE.Math.randFloatSpread(2000);
+
+        starsGeometry.vertices.push(star);
+
     }
-    let sprite = new THREE.TextureLoader().load('../../star.png');
-    let starMaterial = new THREE.PointsMaterial({
-        color: 0xaaaaaaa,
-        size: 1.5,
-        map: sprite
-    })
-    stars = new THREE.Points(starGeo, starMaterial);
-    scene.add(stars);
+
+    var starsMaterial = new THREE.PointsMaterial({ color: 0x888888 });
+
+    var starField = new THREE.Points(starsGeometry, starsMaterial);
+
+    scene.add(starField);
     this.update = function (time) {
 
     //     starGeo.vertices.forEach(p => {
@@ -36,7 +34,7 @@ function starSubjects(scene) {
     //     }
     // });
     // starGeo.verticesNeedUpdate = true; 
-        stars.rotation.y += 0.002;
+        // starField.rotation.y += 0.002;
         // const scale = Math.sin(time) + 2;
 
         // mesh.scale.set(scale, scale, scale);

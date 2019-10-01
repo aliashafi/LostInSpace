@@ -1,17 +1,26 @@
+import { Matrix3 } from './Matrix3.js';
+import { Vector3 } from './Vector3.js';
+
 /**
  * @author bhouston / http://clara.io
  */
 
-THREE.Plane = function ( normal, constant ) {
+var _vector1 = new Vector3();
+var _vector2 = new Vector3();
+var _normalMatrix = new Matrix3();
 
-	this.normal = ( normal !== undefined ) ? normal : new THREE.Vector3( 1, 0, 0 );
+function Plane( normal, constant ) {
+
+	// normal is assumed to be normalized
+
+	this.normal = ( normal !== undefined ) ? normal : new Vector3( 1, 0, 0 );
 	this.constant = ( constant !== undefined ) ? constant : 0;
 
-};
+}
 
-THREE.Plane.prototype = {
+Object.assign( Plane.prototype, {
 
-	constructor: THREE.Plane,
+	isPlane: true,
 
 	set: function ( normal, constant ) {
 
@@ -34,30 +43,23 @@ THREE.Plane.prototype = {
 	setFromNormalAndCoplanarPoint: function ( normal, point ) {
 
 		this.normal.copy( normal );
-		this.constant = - point.dot( this.normal );	// must be this.normal, not normal, as this.normal is normalized
+		this.constant = - point.dot( this.normal );
 
 		return this;
 
 	},
 
-	setFromCoplanarPoints: function () {
+	setFromCoplanarPoints: function ( a, b, c ) {
 
-		var v1 = new THREE.Vector3();
-		var v2 = new THREE.Vector3();
+		var normal = _vector1.subVectors( c, b ).cross( _vector2.subVectors( a, b ) ).normalize();
 
-		return function ( a, b, c ) {
+		// Q: should an error be thrown if normal is zero (e.g. degenerate plane)?
 
-			var normal = v1.subVectors( c, b ).cross( v2.subVectors( a, b ) ).normalize();
+		this.setFromNormalAndCoplanarPoint( normal, a );
 
-			// Q: should an error be thrown if normal is zero (e.g. degenerate plane)?
+		return this;
 
-			this.setFromNormalAndCoplanarPoint( normal, a );
-
-			return this;
-
-		};
-
-	}(),
+	},
 
 	clone: function () {
 
@@ -107,60 +109,57 @@ THREE.Plane.prototype = {
 
 	},
 
-	projectPoint: function ( point, optionalTarget ) {
+	projectPoint: function ( point, target ) {
 
-		return this.orthoPoint( point, optionalTarget ).sub( point ).negate();
+		if ( target === undefined ) {
 
-	},
+			console.warn( 'THREE.Plane: .projectPoint() target is now required' );
+			target = new Vector3();
 
-	orthoPoint: function ( point, optionalTarget ) {
+		}
 
-		var perpendicularMagnitude = this.distanceToPoint( point );
-
-		var result = optionalTarget || new THREE.Vector3();
-		return result.copy( this.normal ).multiplyScalar( perpendicularMagnitude );
+		return target.copy( this.normal ).multiplyScalar( - this.distanceToPoint( point ) ).add( point );
 
 	},
 
-	intersectLine: function () {
+	intersectLine: function ( line, target ) {
 
-		var v1 = new THREE.Vector3();
+		if ( target === undefined ) {
 
-		return function ( line, optionalTarget ) {
+			console.warn( 'THREE.Plane: .intersectLine() target is now required' );
+			target = new Vector3();
 
-			var result = optionalTarget || new THREE.Vector3();
+		}
 
-			var direction = line.delta( v1 );
+		var direction = line.delta( _vector1 );
 
-			var denominator = this.normal.dot( direction );
+		var denominator = this.normal.dot( direction );
 
-			if ( denominator === 0 ) {
+		if ( denominator === 0 ) {
 
-				// line is coplanar, return origin
-				if ( this.distanceToPoint( line.start ) === 0 ) {
+			// line is coplanar, return origin
+			if ( this.distanceToPoint( line.start ) === 0 ) {
 
-					return result.copy( line.start );
-
-				}
-
-				// Unsure if this is the correct method to handle this case.
-				return undefined;
+				return target.copy( line.start );
 
 			}
 
-			var t = - ( line.start.dot( this.normal ) + this.constant ) / denominator;
+			// Unsure if this is the correct method to handle this case.
+			return undefined;
 
-			if ( t < 0 || t > 1 ) {
+		}
 
-				return undefined;
+		var t = - ( line.start.dot( this.normal ) + this.constant ) / denominator;
 
-			}
+		if ( t < 0 || t > 1 ) {
 
-			return result.copy( direction ).multiplyScalar( t ).add( line.start );
+			return undefined;
 
-		};
+		}
 
-	}(),
+		return target.copy( direction ).multiplyScalar( t ).add( line.start );
+
+	},
 
 	intersectsLine: function ( line ) {
 
@@ -185,39 +184,36 @@ THREE.Plane.prototype = {
 
 	},
 
-	coplanarPoint: function ( optionalTarget ) {
+	coplanarPoint: function ( target ) {
 
-		var result = optionalTarget || new THREE.Vector3();
-		return result.copy( this.normal ).multiplyScalar( - this.constant );
+		if ( target === undefined ) {
+
+			console.warn( 'THREE.Plane: .coplanarPoint() target is now required' );
+			target = new Vector3();
+
+		}
+
+		return target.copy( this.normal ).multiplyScalar( - this.constant );
 
 	},
 
-	applyMatrix4: function () {
+	applyMatrix4: function ( matrix, optionalNormalMatrix ) {
 
-		var v1 = new THREE.Vector3();
-		var m1 = new THREE.Matrix3();
+		var normalMatrix = optionalNormalMatrix || _normalMatrix.getNormalMatrix( matrix );
 
-		return function ( matrix, optionalNormalMatrix ) {
+		var referencePoint = this.coplanarPoint( _vector1 ).applyMatrix4( matrix );
 
-			var referencePoint = this.coplanarPoint( v1 ).applyMatrix4( matrix );
+		var normal = this.normal.applyMatrix3( normalMatrix ).normalize();
 
-			// transform normal based on theory here:
-			// http://www.songho.ca/opengl/gl_normaltransform.html
-			var normalMatrix = optionalNormalMatrix || m1.getNormalMatrix( matrix );
-			var normal = this.normal.applyMatrix3( normalMatrix ).normalize();
+		this.constant = - referencePoint.dot( normal );
 
-			// recalculate constant (like in setFromNormalAndCoplanarPoint)
-			this.constant = - referencePoint.dot( normal );
+		return this;
 
-			return this;
-
-		};
-
-	}(),
+	},
 
 	translate: function ( offset ) {
 
-		this.constant = this.constant - offset.dot( this.normal );
+		this.constant -= offset.dot( this.normal );
 
 		return this;
 
@@ -229,4 +225,7 @@ THREE.Plane.prototype = {
 
 	}
 
-};
+} );
+
+
+export { Plane };
