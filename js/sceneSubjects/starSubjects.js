@@ -20,8 +20,9 @@ function starSubjects(scene) {
     var starsMaterial = new THREE.PointsMaterial({ color: 0x888888 });
 
     var starField = new THREE.Points(starsGeometry, starsMaterial);
-
+    starField.name = "stars";
     scene.add(starField);
+    
     this.update = function (time) {
 
     //     starGeo.vertices.forEach(p => {

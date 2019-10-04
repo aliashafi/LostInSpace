@@ -52,6 +52,15 @@ function MilkyWay(scene) {
     spiralGalaxy6.position.set(120, 100, 530)
     spiralGalaxy7.position.set(125, 100, 540)
     spiralGalaxy8.position.set(130, 100, 550)
+    spiralGalaxy.name = "stars"
+    spiralGalaxy2.name = "stars"
+    spiralGalaxy3.name = "stars"
+    spiralGalaxy4.name = "stars"
+    spiralGalaxy5.name = "stars"
+    spiralGalaxy6.name = "stars"
+    spiralGalaxy7.name = "stars"
+    spiralGalaxy8.name = "stars"
+    
     scene.add(spiralGalaxy)
     scene.add(spiralGalaxy2)
     scene.add(spiralGalaxy3)

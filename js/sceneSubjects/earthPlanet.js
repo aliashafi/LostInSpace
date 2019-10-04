@@ -23,6 +23,7 @@ function EarthSubject(scene) {
     
     light.add(mesh);
     scene.add(light)
+    mesh.name = "sun"
     mesh.position.set(0, 0, 0);
     scene.add(mesh);
 

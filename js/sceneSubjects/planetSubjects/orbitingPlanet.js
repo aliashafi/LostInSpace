@@ -31,7 +31,7 @@ function OrbitingPlanet(scene) {
     var r = 75;
     var theta = 0;
     var dTheta = 1 * Math.PI / 1000;
-    
+    mesh.name = "earth"
     scene.add(mesh);
     this.update = function (time) {
         mesh.rotateY(.004)

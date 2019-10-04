@@ -28,7 +28,6 @@ function SceneManager (canvas){
     this.scene = buildScene();
     this.renderer = buildRender(screenDimensions);
     this.location = [10, 10, 100];
-    // this.location =[10,10,0]
     this.camera = buildCamera(screenDimensions, this.location);
 
     this.rotation = [0,0,0]
@@ -38,29 +37,28 @@ function SceneManager (canvas){
     // let constrols = new THREE.OrbitControls(camera)
 
     this.moveRocket = function (keycode) {
-        console.log(keycode)
         let newLocation = this.location
         let newRotation = this.rotation
         if (keycode === 87) {
-            newLocation[1] = newLocation[1] + 2
+            newLocation[1] = newLocation[1] + .4
         } else if (keycode === 65) {
-            newLocation[0] = newLocation[0] - 2
+            newLocation[0] = newLocation[0] - .4
         } else if (keycode === 68) {
-            newLocation[0] = newLocation[0] + 2
+            newLocation[0] = newLocation[0] + .4
         } else if (keycode === 83) {
-            newLocation[1] = newLocation[1] - 2
+            newLocation[1] = newLocation[1] - .4
         } else if (keycode === 69) {
-            newLocation[2] = newLocation[2] + 2
+            newLocation[2] = newLocation[2] + .4
         } else if (keycode === 81) {
-            newLocation[2] = newLocation[2] - 2
+            newLocation[2] = newLocation[2] - .4
         } else if (keycode === 74){
-            newRotation[1] = newRotation[1] + .2
+            newRotation[1] = newRotation[1] + .02
         }else if (keycode === 76) {
-            newRotation[1] = newRotation[1] - .2
+            newRotation[1] = newRotation[1] - .02
         } else if (keycode === 75) {
-            newRotation[2] = newRotation[2] + .2
+            newRotation[2] = newRotation[2] + .02
         } else if (keycode === 73) {
-            newRotation[2] = newRotation[2] - .2
+            newRotation[2] = newRotation[2] - .02
         }
         this.location = newLocation;
     }

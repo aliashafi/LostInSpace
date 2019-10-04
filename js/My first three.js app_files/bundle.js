@@ -141,6 +141,7 @@ function SceneManager (canvas){
     this.scene = buildScene();
     this.renderer = buildRender(screenDimensions);
     this.location = [10, 10, 100];
+    // this.location =[10,10,0]
     this.camera = buildCamera(screenDimensions, this.location);
 
     this.rotation = [0,0,0]
@@ -153,25 +154,25 @@ function SceneManager (canvas){
         let newLocation = this.location
         let newRotation = this.rotation
         if (keycode === 87) {
-            newLocation[1] = newLocation[1] + .4
+            newLocation[1] = newLocation[1] + 2
         } else if (keycode === 65) {
-            newLocation[0] = newLocation[0] - .4
+            newLocation[0] = newLocation[0] - 2
         } else if (keycode === 68) {
-            newLocation[0] = newLocation[0] + .4
+            newLocation[0] = newLocation[0] + 2
         } else if (keycode === 83) {
-            newLocation[1] = newLocation[1] - .4
+            newLocation[1] = newLocation[1] - 2
         } else if (keycode === 69) {
-            newLocation[2] = newLocation[2] + .4
+            newLocation[2] = newLocation[2] + 2
         } else if (keycode === 81) {
-            newLocation[2] = newLocation[2] - .4
+            newLocation[2] = newLocation[2] - 2
         } else if (keycode === 74){
-            newRotation[1] = newRotation[1] + .02
+            newRotation[1] = newRotation[1] + .2
         }else if (keycode === 76) {
-            newRotation[1] = newRotation[1] - .02
+            newRotation[1] = newRotation[1] - .2
         } else if (keycode === 75) {
-            newRotation[2] = newRotation[2] + .02
+            newRotation[2] = newRotation[2] + .2
         } else if (keycode === 73) {
-            newRotation[2] = newRotation[2] - .02
+            newRotation[2] = newRotation[2] - .2
         }
         this.location = newLocation;
     }
@@ -453,15 +454,6 @@ function MilkyWay(scene) {
     spiralGalaxy6.position.set(120, 100, 530)
     spiralGalaxy7.position.set(125, 100, 540)
     spiralGalaxy8.position.set(130, 100, 550)
-    spiralGalaxy.name = "stars"
-    spiralGalaxy2.name = "stars"
-    spiralGalaxy3.name = "stars"
-    spiralGalaxy4.name = "stars"
-    spiralGalaxy5.name = "stars"
-    spiralGalaxy6.name = "stars"
-    spiralGalaxy7.name = "stars"
-    spiralGalaxy8.name = "stars"
-    
     scene.add(spiralGalaxy)
     scene.add(spiralGalaxy2)
     scene.add(spiralGalaxy3)
@@ -1117,9 +1109,8 @@ function starSubjects(scene) {
     var starsMaterial = new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0x888888 });
 
     var starField = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](starsGeometry, starsMaterial);
-    starField.name = "stars";
+
     scene.add(starField);
-    
     this.update = function (time) {
 
     //     starGeo.vertices.forEach(p => {
@@ -1228,12 +1219,12 @@ function UFO(scene, location, camera) {
     scene.add(this.rocketShip);
     scene.add(this.fireShip)
     this.updateLocation = function(location){
-        
+        this.fireShip.position.set(location[0], location[1], location[2])
+        this.rocketShip.position.set(location[0],location[1],location[2])
 
         ///collision
         let planets = scene.getObjectByName('sun');
-        let collidableMeshList = scene.children
-        collidableMeshList = collidableMeshList.filter(subj => subj.name !== "stars")
+        let collidableMeshList = [planets]
         let rocketShip = scene.getObjectByName('cube');
         let originPoint = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](location[0], location[1], location[2])
         // let originPoint = this.rocketShip.position.clone(); 
@@ -1242,7 +1233,6 @@ function UFO(scene, location, camera) {
         for (var vertexIndex = 0; vertexIndex < rocketShip.geometry.vertices.length; vertexIndex++){
             var localVertex = rocketShip.geometry.vertices[vertexIndex].clone();
             var globalVertex = localVertex.applyMatrix4(rocketShip.matrix);
-            // var directionVector = globalVertex.sub(this.rocketShip.position);
             var directionVector = globalVertex.sub(this.rocketShip.position);
 
             var ray = new three__WEBPACK_IMPORTED_MODULE_0__["Raycaster"](
@@ -1250,21 +1240,31 @@ function UFO(scene, location, camera) {
            
             var collisionResults =
                 ray.intersectObjects(collidableMeshList);
-
         }
         
         if (collisionResults.length > 0){
             console.log("collision")
-            // debugger
             
-            // this.rocketShip.position.set(location[0] -5 , location[1] -5, location[2] -5)
-            // this.fireShip.position.set(location[0] -5 , location[1] -5, location[2] -5)
-        }else{
-            this.fireShip.position.set(location[0], location[1], location[2])
-            this.rocketShip.position.set(location[0], location[1], location[2])
+            this.rocketShip.position.set(location[0] -5 , location[1] -5, location[2] -5)
+            this.fireShip.position.set(location[0] -5 , location[1] -5, location[2] -5)
         }
         
 
+        // if (collisionResults.length > 0
+        //     && collisionResults[0].distance < directionVector.length()) {
+        //     var tweens = TWEEN.getAll();
+
+        //     if (tweens.length > 0) {
+
+        //         tweens[0].stop();
+        //         TWEEN.removeAll();
+        //         isTweening = false;
+
+        //         scene.remove(cube);
+        //         cube = createCube();
+        //     }
+        
+        // }
     }
 
     
@@ -1310,17 +1310,16 @@ __webpack_require__.r(__webpack_exports__);
 const canvas = document.getElementById("canvas");
 const sceneManager = new _js_sceneManager__WEBPACK_IMPORTED_MODULE_0__["default"](canvas);
 
-
+bindEventListeners();
+render();
 
 document.body.appendChild(sceneManager.renderer.domElement);
 const controls = new Three_examples_jsm_controls_OrbitControls_js__WEBPACK_IMPORTED_MODULE_1__["OrbitControls"](sceneManager.camera, sceneManager.renderer.domElement);
 controls.addEventListener('change', () => sceneManager.renderer.render(sceneManager.scene, sceneManager.camera));
-let keycode = 9;
-document.addEventListener('keydown', (e) => keycode = e.keyCode);
-// sceneManager.moveRocket(e.keyCode)
+
+document.addEventListener('keydown', (e) => sceneManager.moveRocket(e.keyCode))
+
 // sceneManager.moveRocket()
-bindEventListeners();
-render();
 
 function bindEventListeners() {
     window.onresize = resizeCanvas;
@@ -1340,9 +1339,7 @@ function resizeCanvas() {
 }
 
 function render() {
-    
     requestAnimationFrame(render);
-    if (keycode) sceneManager.moveRocket(keycode);
     sceneManager.update();
 }
 
