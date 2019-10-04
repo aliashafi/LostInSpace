@@ -5,8 +5,8 @@ import { TweenMax, Power2, TimelineLite, TimelineMax, Expo } from "gsap/TweenMax
 
 function OrbitingPlanet(scene) {
 
-    const radius = .5;
-    var geometry = new THREE.SphereGeometry(2, 16, 16);
+    
+    var geometry = new THREE.SphereGeometry(5, 16, 16);
     var material = new THREE.MeshPhongMaterial({ });
     material.map = THREE.ImageUtils.loadTexture('images/earthmap.jpg');
     material.bumpMap = THREE.ImageUtils.loadTexture('images/earthbump.jpg')
@@ -15,7 +15,7 @@ function OrbitingPlanet(scene) {
     material.specular = new THREE.Color('grey')
 
     var mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(2, 0, 10);
+    mesh.position.set(5, 0, 0);
 
 
     var geometry1 = new THREE.SphereGeometry(0.51, 32, 32)
@@ -28,14 +28,16 @@ function OrbitingPlanet(scene) {
     var cloudMesh = new THREE.Mesh(geometry1, material1)
 
 
-    this.t1 = new TweenMax({paused: false})
+    var r = 75;
+    var theta = 0;
+    var dTheta = 1 * Math.PI / 1000;
     
     scene.add(mesh);
     this.update = function (time) {
-        // const scale = Math.sin(time) + 2;
         mesh.rotateY(.004)
-        mesh.translateX(.15);
-        // mesh.scale.set(scale, scale, scale);
+        theta += dTheta;
+        mesh.position.x = r * Math.cos(theta);
+        mesh.position.z = r * Math.sin(theta);
     }
 }
 export default OrbitingPlanet;

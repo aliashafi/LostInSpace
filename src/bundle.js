@@ -101,7 +101,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sceneSubjects_starSubjects__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./sceneSubjects/starSubjects */ "./js/sceneSubjects/starSubjects.js");
 /* harmony import */ var _sceneSubjects_planetSubjects_orbitingPlanet__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/orbitingPlanet */ "./js/sceneSubjects/planetSubjects/orbitingPlanet.js");
 /* harmony import */ var _sceneSubjects_planetSubjects_SaturnPlanet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/SaturnPlanet */ "./js/sceneSubjects/planetSubjects/SaturnPlanet.js");
+/* harmony import */ var _sceneSubjects_planetSubjects_mercuryPlanet__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/mercuryPlanet */ "./js/sceneSubjects/planetSubjects/mercuryPlanet.js");
+/* harmony import */ var _sceneSubjects_planetSubjects_venusPlanet__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/venusPlanet */ "./js/sceneSubjects/planetSubjects/venusPlanet.js");
+/* harmony import */ var _sceneSubjects_planetSubjects_marsPlanet__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/marsPlanet */ "./js/sceneSubjects/planetSubjects/marsPlanet.js");
+/* harmony import */ var _sceneSubjects_planetSubjects_jupiterPlanet__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/jupiterPlanet */ "./js/sceneSubjects/planetSubjects/jupiterPlanet.js");
+/* harmony import */ var _sceneSubjects_planetSubjects_uranusPlanet__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/uranusPlanet */ "./js/sceneSubjects/planetSubjects/uranusPlanet.js");
+/* harmony import */ var _sceneSubjects_planetSubjects_neptunePlanet__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/neptunePlanet */ "./js/sceneSubjects/planetSubjects/neptunePlanet.js");
+/* harmony import */ var _sceneSubjects_planetSubjects_plutoPlanet__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/plutoPlanet */ "./js/sceneSubjects/planetSubjects/plutoPlanet.js");
+/* harmony import */ var _sceneSubjects_ufo__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./sceneSubjects/ufo */ "./js/sceneSubjects/ufo.js");
+/* harmony import */ var _sceneSubjects_milkyWay__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./sceneSubjects/milkyWay */ "./js/sceneSubjects/milkyWay.js");
+/* harmony import */ var _sceneSubjects_patrickStar__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./sceneSubjects/patrickStar */ "./js/sceneSubjects/patrickStar.js");
 //pass canvas, and handle the DOM events we care about 
+
+
+
+
+
+
+
+
+
 
 
 
@@ -118,23 +137,54 @@ function SceneManager (canvas){
         height: canvas.height
     }
 
+
     this.scene = buildScene();
     this.renderer = buildRender(screenDimensions);
-    this.camera = buildCamera(screenDimensions);
-    const sceneSubjects = createSceneSubjects(this.scene);
-    
+    this.location = [10, 10, 100];
+    // this.location =[10,10,0]
+    this.camera = buildCamera(screenDimensions, this.location);
+
+    this.rotation = [0,0,0]
+    const sceneSubjects = createSceneSubjects(this.scene, this.location);
+    const RocketShip = createRocketShip(this.scene, this.location, this.camera)
 
     // let constrols = new THREE.OrbitControls(camera)
 
-
+    this.moveRocket = function (keycode) {
+        console.log(keycode)
+        let newLocation = this.location
+        let newRotation = this.rotation
+        if (keycode === 87) {
+            newLocation[1] = newLocation[1] + 2
+        } else if (keycode === 65) {
+            newLocation[0] = newLocation[0] - 2
+        } else if (keycode === 68) {
+            newLocation[0] = newLocation[0] + 2
+        } else if (keycode === 83) {
+            newLocation[1] = newLocation[1] - 2
+        } else if (keycode === 69) {
+            newLocation[2] = newLocation[2] + 2
+        } else if (keycode === 81) {
+            newLocation[2] = newLocation[2] - 2
+        } else if (keycode === 74){
+            newRotation[1] = newRotation[1] + .2
+        }else if (keycode === 76) {
+            newRotation[1] = newRotation[1] - .2
+        } else if (keycode === 75) {
+            newRotation[2] = newRotation[2] + .2
+        } else if (keycode === 73) {
+            newRotation[2] = newRotation[2] - .2
+        }
+        this.location = newLocation;
+    }
 
     function buildScene() {
         const scene = new three__WEBPACK_IMPORTED_MODULE_0__["Scene"]();
+        scene.fog = new three__WEBPACK_IMPORTED_MODULE_0__["Fog"](0x050505, 2000, 3500);
         scene.background = new three__WEBPACK_IMPORTED_MODULE_0__["Color"]("#000");
 
         return scene;
     }
-
     
 
     function buildRender({ width, height }) {
@@ -150,15 +200,23 @@ function SceneManager (canvas){
         return renderer;
     }
 
-    function buildCamera({ width, height }) {
+    function buildCamera({ width, height }, location) {
+        console.log(location)
         const aspectRatio = width / height;
-        const fieldOfView = 50;
+        const fieldOfView = 40;
         const nearPlane = .1;
-        const farPlane = 1000;
+        const farPlane = 10000;
         const camera = new three__WEBPACK_IMPORTED_MODULE_0__["PerspectiveCamera"](fieldOfView, aspectRatio, nearPlane, farPlane);
-        camera.position.z = 20;
+        camera.position.x = location[0];
+        camera.position.y = location[1];
+        camera.position.z = location[2];
+        // camera.lookAt(location[0], location[1], location[2])
+        
+        // scene.add(camera);
+        // camera.position.set(location[0], location[1], 100);
         return camera;
     }
+
 
     function createSceneSubjects(scene) {
         const sceneSubjects = [
@@ -167,19 +225,44 @@ function SceneManager (canvas){
             new _sceneSubjects_starSubjects__WEBPACK_IMPORTED_MODULE_3__["default"](scene),
             new _sceneSubjects_planetSubjects_orbitingPlanet__WEBPACK_IMPORTED_MODULE_4__["default"](scene),
             new _sceneSubjects_planetSubjects_SaturnPlanet__WEBPACK_IMPORTED_MODULE_5__["default"](scene),
+            new _sceneSubjects_planetSubjects_mercuryPlanet__WEBPACK_IMPORTED_MODULE_6__["default"](scene),
+            new _sceneSubjects_planetSubjects_venusPlanet__WEBPACK_IMPORTED_MODULE_7__["default"](scene),
+            new _sceneSubjects_planetSubjects_marsPlanet__WEBPACK_IMPORTED_MODULE_8__["default"](scene),
+            new _sceneSubjects_planetSubjects_jupiterPlanet__WEBPACK_IMPORTED_MODULE_9__["default"](scene),
+            new _sceneSubjects_planetSubjects_uranusPlanet__WEBPACK_IMPORTED_MODULE_10__["default"](scene),
+            new _sceneSubjects_planetSubjects_neptunePlanet__WEBPACK_IMPORTED_MODULE_11__["default"](scene),
+            new _sceneSubjects_planetSubjects_plutoPlanet__WEBPACK_IMPORTED_MODULE_12__["default"](scene),
+            new _sceneSubjects_milkyWay__WEBPACK_IMPORTED_MODULE_14__["default"](scene),
+            new _sceneSubjects_patrickStar__WEBPACK_IMPORTED_MODULE_15__["default"](scene),
         ];
 
         return sceneSubjects;
     }
 
+    function createRocketShip(scene, location, camera){
+        return new _sceneSubjects_ufo__WEBPACK_IMPORTED_MODULE_13__["default"](scene, location, camera)
+    }
+    
+
     this.update = function () {
         const elapsedTime = clock.getElapsedTime();
-
-        for (let i = 0; i < sceneSubjects.length; i++)
+        for (let i = 0; i < sceneSubjects.length; i++){
+            
             sceneSubjects[i].update(elapsedTime);
+        }
 
+        RocketShip.updateLocation(this.location)
+        RocketShip.updateRotation(this.rotation[0], this.rotation[1], this.rotation[2])
+        RocketShip.update(elapsedTime)
+        this.rotation = [0,0,0]
         this.renderer.render(this.scene, this.camera);
+        
     }
+
+    this.showFire = function(){
+        RocketShip.updateFire(this.location);
+    }
+
 
     this.onWindowResize = function () {
         const { width, height } = canvas;
@@ -222,10 +305,12 @@ function EarthSubject(scene) {
 
     var light = new three__WEBPACK_IMPORTED_MODULE_0__["PointLight"](0xffffff, 1);
     // const mesh = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(radius, 2), new THREE.MeshStandardMaterial({ flatShading: true }));
-    let geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](1, 16, 16);
+    let geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](4, 16, 16);
+    // let geometry = new THREE.SphereGeometry(1000, 16, 16);
     // let material = new THREE.MeshPhongMaterial({ color: "0xffffff" });
     let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshBasicMaterial"]({ color: 0xffffff, blending: three__WEBPACK_IMPORTED_MODULE_0__["AdditiveBlending"], transparent: false });
 
+    // material.side = THREE.BackSide;
     
     let mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
     
@@ -236,7 +321,7 @@ function EarthSubject(scene) {
     
     light.add(mesh);
     scene.add(light)
-    mesh.position.set(2, 0, 0);
+    mesh.position.set(0, 0, 0);
     scene.add(mesh);
 
     this.update = function (time) {
@@ -277,6 +362,17 @@ function GeneralLights(scene) {
     // scene.add(light3);
     // scene.add(light4);
 
+    ///
+    three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].crossOrigin = '';
+    var textureFlare0 = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture("https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/lensflare/lensflare0.png");
+    var flareColor = new three__WEBPACK_IMPORTED_MODULE_0__["Color"](0xffffff);
+    flareColor.setHSL(0.55, 0.9, 0.5 + 0.5);
+    var lensFlare = new three__WEBPACK_IMPORTED_MODULE_0__["LensFlare"](0,0, flareColor);
+    scene.add(lensFlare);
+    //
+
+    
+
     //adding ambient light
     let ambientLight = new three__WEBPACK_IMPORTED_MODULE_0__["AmbientLight"](0x2c3e50);
     scene.add(ambientLight);
@@ -291,6 +387,152 @@ function GeneralLights(scene) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (GeneralLights);
+
+/***/ }),
+
+/***/ "./js/sceneSubjects/milkyWay.js":
+/*!**************************************!*\
+  !*** ./js/sceneSubjects/milkyWay.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+
+
+function MilkyWay(scene) {
+
+
+    var starsGeometry = new three__WEBPACK_IMPORTED_MODULE_0__["Geometry"]();
+
+    var light = new three__WEBPACK_IMPORTED_MODULE_0__["PointLight"](0xffffff, 1);
+    
+    const geometry = new three__WEBPACK_IMPORTED_MODULE_0__["Geometry"]()
+    const galaxySize = 600
+    var norm = 0;
+
+    let rings = [2,3,5,7,10]
+    // Generate particles for spiral galaxy:
+    for (let r=0; r < 5; r ++){
+        for (let i = 0; i < 10000; i++) {
+            norm = i / 10000;
+            var thetaVariation = three__WEBPACK_IMPORTED_MODULE_0__["Math"].randFloatSpread(0.5)
+            var theta = norm * Math.PI * rings[r] + thetaVariation;
+            var phi = three__WEBPACK_IMPORTED_MODULE_0__["Math"].randFloatSpread(0.3)
+            const distance = norm * galaxySize;
+
+            // Here I need generate spiral arms instead of sphere.
+            geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](
+                distance * Math.sin(theta) * Math.cos(phi),
+                distance * Math.sin(theta) * Math.sin(phi),
+                distance * Math.cos(theta)
+            ))
+            
+        }
+
+    }
+
+    
+
+    // light.add(new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0xffffff })))
+
+    const spiralGalaxy = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0xffffff }))
+    const spiralGalaxy2 = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0xaeeb34 }))
+    const spiralGalaxy3 = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0x9934eb }))
+    const spiralGalaxy4 = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0x9934eb }))
+    const spiralGalaxy5 = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0xffffff }))
+    const spiralGalaxy6 = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0xaeeb34 }))
+    const spiralGalaxy7 = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0x9934eb }))
+    const spiralGalaxy8 = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0x9934eb }))
+    spiralGalaxy.position.set(110,100,520)
+    spiralGalaxy2.position.set(120,100,530)
+    spiralGalaxy3.position.set(125,100,540)
+    spiralGalaxy4.position.set(130,100,550)
+    spiralGalaxy5.position.set(110, 100, 520)
+    spiralGalaxy6.position.set(120, 100, 530)
+    spiralGalaxy7.position.set(125, 100, 540)
+    spiralGalaxy8.position.set(130, 100, 550)
+    scene.add(spiralGalaxy)
+    scene.add(spiralGalaxy2)
+    scene.add(spiralGalaxy3)
+    scene.add(spiralGalaxy4)
+    scene.add(spiralGalaxy5)
+    scene.add(spiralGalaxy6)
+    scene.add(spiralGalaxy7)
+    scene.add(spiralGalaxy8)
+    
+    this.update = function (time) {
+        spiralGalaxy.rotation.y += 0.001;
+        spiralGalaxy2.rotation.y += 0.001;
+        spiralGalaxy3.rotation.y += 0.001;
+        spiralGalaxy4.rotation.y += 0.001;
+    }
+}
+/* harmony default export */ __webpack_exports__["default"] = (MilkyWay);
+
+/***/ }),
+
+/***/ "./js/sceneSubjects/patrickStar.js":
+/*!*****************************************!*\
+  !*** ./js/sceneSubjects/patrickStar.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap/TweenMax */ "./node_modules/gsap/TweenMax.js");
+/* harmony import */ var three_examples_jsm_loaders_OBJLoader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three/examples/jsm/loaders/OBJLoader */ "./node_modules/three/examples/jsm/loaders/OBJLoader.js");
+/* harmony import */ var three_examples_jsm_loaders_MTLLoader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! three/examples/jsm/loaders/MTLLoader */ "./node_modules/three/examples/jsm/loaders/MTLLoader.js");
+
+
+
+
+
+
+function PatrickStar(scene) {
+    this.PatrickStar = new three__WEBPACK_IMPORTED_MODULE_0__["Group"]()
+    const mtlLoader = new three_examples_jsm_loaders_MTLLoader__WEBPACK_IMPORTED_MODULE_3__["MTLLoader"]();
+    mtlLoader.load('../../images/Patrick.mtl', materials => {
+        materials.preload();
+        const objLoader = new three_examples_jsm_loaders_OBJLoader__WEBPACK_IMPORTED_MODULE_2__["OBJLoader"]();
+        objLoader.setMaterials(materials);
+        objLoader.load('../../images/Patrick.obj', obj => {
+            // obj.rotateX(-3.5708);
+            obj.rotateY(-3.1);
+            // obj.scale.set(.06, .06, .06);
+            obj.position.set(10,10,10);
+            this.PatrickStar.add(obj)
+
+        });
+    });
+
+    scene.add(this.PatrickStar)
+    // let pos = 
+
+    this.update = function (time) {
+
+       
+            
+        this.PatrickStar.rotateY(.04)
+        this.PatrickStar.rotateX(.04)
+        // this.PatrickStar.position.y += 1
+        
+        
+        // }else if (Math.floor(time) % 4 === 0){
+        //     this.PatrickStar.position.x += 4
+        //     this.PatrickStar.position.y -= 4
+        // }else{
+        //     this.PatrickStar.position.x += 1;
+        //     this.PatrickStar.position.y -= 1;
+        // }
+        // mesh.scale.set(scale, scale, scale);
+    }
+}
+/* harmony default export */ __webpack_exports__["default"] = (PatrickStar);
 
 /***/ }),
 
@@ -313,16 +555,16 @@ __webpack_require__.r(__webpack_exports__);
 function SaturnPlanet(scene) {
 
     ///surface
-    let geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](2, 16, 16);
+    let geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](7, 16, 16);
     let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({});
     material.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/saturnmap.jpg');
 
     let mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
-    mesh.position.set(5, 0, -20);
+    mesh.position.set(20, 0, 0);
 
     ///Ring
-    let geometry2 = new three__WEBPACK_IMPORTED_MODULE_0__["RingGeometry"](3, 2, 32);
-    let material2 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({ color: 0xffff00, side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"] });
+    let geometry2 = new three__WEBPACK_IMPORTED_MODULE_0__["RingGeometry"](8, 15, 40);
+    let material2 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({ side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"] });
     material2.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/saturnringcolor.jpg');
     let ring = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry2, material2);
     ring.position.set(0, 0, 0);
@@ -341,20 +583,253 @@ function SaturnPlanet(scene) {
     ring.rotateX(2);
     mesh.add(ring)
     scene.add(mesh);
-    // scene.add(ring);
+
+    var r = 200;
+    var theta = 0;
+    var dTheta = 2 * Math.PI / 10000;
     
    
     this.update = function (time) {
         // const scale = Math.sin(time) + 2;
         mesh.rotateY(.004)
-        mesh.translateX(.25);
-        // ring.translateX(.15) ;
-        // ring.rotateY(.004);
-        // ring.rotateZ(.004);
-        // mesh.scale.set(scale, scale, scale);
+        // mesh.translateX(.25);
+        theta += dTheta;
+        mesh.position.x = r * Math.cos(theta);
+        mesh.position.z = r * Math.sin(theta);
+        
     }
 }
 /* harmony default export */ __webpack_exports__["default"] = (SaturnPlanet);
+
+/***/ }),
+
+/***/ "./js/sceneSubjects/planetSubjects/jupiterPlanet.js":
+/*!**********************************************************!*\
+  !*** ./js/sceneSubjects/planetSubjects/jupiterPlanet.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap/TweenMax */ "./node_modules/gsap/TweenMax.js");
+
+
+
+
+
+function JupiterPlanet(scene) {
+
+
+    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](8, 16, 16);
+    var material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({});
+    material.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/jupiter2colorthumb.jpg');
+    material.bumpScale = 0.05
+
+    var mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
+    mesh.position.set(15, 0, 0);
+
+
+    var geometry1 = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](0.5, 32, 32)
+    var material1 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({
+        side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
+        opacity: 0.8,
+        transparent: true,
+        depthWrite: false,
+    })
+    // var cloudMesh = new THREE.Mesh(geometry1, material1)
+
+
+    var r = 115;
+    var theta = 0;
+    var dTheta = .9 * Math.PI / 1000;
+
+    scene.add(mesh);
+    this.update = function (time) {
+        mesh.rotateY(.04)
+        theta += dTheta;
+        mesh.position.x = r * Math.cos(theta);
+        mesh.position.z = r * Math.sin(theta);
+    }
+}
+/* harmony default export */ __webpack_exports__["default"] = (JupiterPlanet);
+
+
+
+
+/***/ }),
+
+/***/ "./js/sceneSubjects/planetSubjects/marsPlanet.js":
+/*!*******************************************************!*\
+  !*** ./js/sceneSubjects/planetSubjects/marsPlanet.js ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap/TweenMax */ "./node_modules/gsap/TweenMax.js");
+
+
+
+
+
+function MarsPlanet(scene) {
+
+
+    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](2, 16, 16);
+    var material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({});
+    material.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/mars_thumbnail.jpg');
+    material.bumpMap = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/marsbumpthumb.jpg')
+    material.bumpScale = 0.05
+
+    var mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
+    mesh.position.set(2, 0, 0);
+
+
+    var geometry1 = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](0.5, 32, 32)
+    var material1 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({
+        side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
+        opacity: 0.8,
+        transparent: true,
+        depthWrite: false,
+    })
+    // var cloudMesh = new THREE.Mesh(geometry1, material1)
+
+
+    var r = 95;
+    var theta = 0;
+    var dTheta = .75 * Math.PI / 1000;
+
+    scene.add(mesh);
+    this.update = function (time) {
+        mesh.rotateY(.004)
+        theta += dTheta;
+        mesh.position.x = r * Math.cos(theta);
+        mesh.position.z = r * Math.sin(theta);
+    }
+}
+/* harmony default export */ __webpack_exports__["default"] = (MarsPlanet);
+
+
+
+
+/***/ }),
+
+/***/ "./js/sceneSubjects/planetSubjects/mercuryPlanet.js":
+/*!**********************************************************!*\
+  !*** ./js/sceneSubjects/planetSubjects/mercuryPlanet.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap/TweenMax */ "./node_modules/gsap/TweenMax.js");
+
+
+
+
+
+function MercuryPlanet(scene) {
+
+
+    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](2, 16, 16);
+    var material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({});
+    material.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/mercurymap.jpg');
+    material.bumpMap = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/mercurybumpthumb.jpg')
+    material.bumpScale = 0.05
+
+    var mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
+    mesh.position.set(2, 0, 0);
+
+
+    var geometry1 = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](0.5, 32, 32)
+    var material1 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({
+        side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
+        opacity: 0.8,
+        transparent: true,
+        depthWrite: false,
+    })
+    // var cloudMesh = new THREE.Mesh(geometry1, material1)
+
+
+    var r = 35;
+    var theta = 0;
+    var dTheta = 3 * Math.PI / 1000;
+
+    scene.add(mesh);
+    this.update = function (time) {
+        mesh.rotateY(.004)
+        theta += dTheta;
+        mesh.position.x = r * Math.cos(theta);
+        mesh.position.z = r * Math.sin(theta);
+    }
+}
+/* harmony default export */ __webpack_exports__["default"] = (MercuryPlanet);
+
+
+
+
+/***/ }),
+
+/***/ "./js/sceneSubjects/planetSubjects/neptunePlanet.js":
+/*!**********************************************************!*\
+  !*** ./js/sceneSubjects/planetSubjects/neptunePlanet.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap/TweenMax */ "./node_modules/gsap/TweenMax.js");
+
+
+
+
+
+function NeptunePlanet(scene) {
+
+
+    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](2, 16, 16);
+    var material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({});
+    material.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/neptunemapthumb.jpg');    
+    material.specular = new three__WEBPACK_IMPORTED_MODULE_0__["Color"]('grey')
+
+    var mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
+    mesh.position.set(5, 0, 0);
+
+
+    var geometry1 = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](0.51, 32, 32)
+    var material1 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({
+        side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
+        opacity: 0.8,
+        transparent: true,
+        depthWrite: false,
+    })
+    var cloudMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry1, material1)
+
+
+    var r = 320;
+    var theta = 0;
+    var dTheta = .3 * Math.PI / 1000;
+
+    scene.add(mesh);
+    this.update = function (time) {
+        mesh.rotateY(.004)
+        theta += dTheta;
+        mesh.position.x = r * Math.cos(theta);
+        mesh.position.z = r * Math.sin(theta);
+    }
+}
+/* harmony default export */ __webpack_exports__["default"] = (NeptunePlanet);
+
+
+
 
 /***/ }),
 
@@ -376,8 +851,8 @@ __webpack_require__.r(__webpack_exports__);
 
 function OrbitingPlanet(scene) {
 
-    const radius = .5;
-    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](2, 16, 16);
+    
+    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](5, 16, 16);
     var material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({ });
     material.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/earthmap.jpg');
     material.bumpMap = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/earthbump.jpg')
@@ -386,7 +861,7 @@ function OrbitingPlanet(scene) {
     material.specular = new three__WEBPACK_IMPORTED_MODULE_0__["Color"]('grey')
 
     var mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
-    mesh.position.set(2, 0, 10);
+    mesh.position.set(5, 0, 0);
 
 
     var geometry1 = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](0.51, 32, 32)
@@ -399,17 +874,203 @@ function OrbitingPlanet(scene) {
     var cloudMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry1, material1)
 
 
-    this.t1 = new gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__["TweenMax"]({paused: false})
+    var r = 75;
+    var theta = 0;
+    var dTheta = 1 * Math.PI / 1000;
     
     scene.add(mesh);
     this.update = function (time) {
-        // const scale = Math.sin(time) + 2;
         mesh.rotateY(.004)
-        mesh.translateX(.15);
-        // mesh.scale.set(scale, scale, scale);
+        theta += dTheta;
+        mesh.position.x = r * Math.cos(theta);
+        mesh.position.z = r * Math.sin(theta);
     }
 }
 /* harmony default export */ __webpack_exports__["default"] = (OrbitingPlanet);
+
+
+
+
+/***/ }),
+
+/***/ "./js/sceneSubjects/planetSubjects/plutoPlanet.js":
+/*!********************************************************!*\
+  !*** ./js/sceneSubjects/planetSubjects/plutoPlanet.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap/TweenMax */ "./node_modules/gsap/TweenMax.js");
+
+
+
+
+
+function PlutoPlanet(scene) {
+
+
+    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](2, 16, 16);
+    var material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({});
+    material.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/plutomapthumb.jpg');
+    material.bumpScale = 0.05
+    material.specular = new three__WEBPACK_IMPORTED_MODULE_0__["Color"]('grey')
+
+    var mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
+    mesh.position.set(5, 0, 0);
+
+
+    var geometry1 = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](0.51, 32, 32)
+    var material1 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({
+        side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
+        opacity: 0.8,
+        transparent: true,
+        depthWrite: false,
+    })
+    var cloudMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry1, material1)
+
+
+    var r = 330;
+    var theta = 0;
+    var dTheta = .2 * Math.PI / 1000;
+
+    scene.add(mesh);
+    this.update = function (time) {
+        mesh.rotateY(.004)
+        theta += dTheta;
+        mesh.position.x = r * Math.cos(theta);
+        mesh.position.z = r * Math.sin(theta);
+    }
+}
+/* harmony default export */ __webpack_exports__["default"] = (PlutoPlanet);
+
+
+
+
+/***/ }),
+
+/***/ "./js/sceneSubjects/planetSubjects/uranusPlanet.js":
+/*!*********************************************************!*\
+  !*** ./js/sceneSubjects/planetSubjects/uranusPlanet.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap/TweenMax */ "./node_modules/gsap/TweenMax.js");
+
+
+
+
+
+function UranusPlanet(scene) {
+
+    ///surface
+    let geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](7, 16, 16);
+    let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({});
+    material.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/uranusmapthumb.jpg');
+    
+    let mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
+    mesh.position.set(25, 0, 0);
+
+    ///Ring
+    let geometry2 = new three__WEBPACK_IMPORTED_MODULE_0__["RingGeometry"](8, 15, 40);
+    let material2 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({ side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"] });
+    material2.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/uranusringcolour.jpg');
+    material2.alphaMap = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/uranusringtrans.jpg');
+    let ring = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry2, material2);
+    ring.position.set(0, 0, 0);
+
+    let geometry1 = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](0.2, 32, 32)
+    let material1 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({
+        side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
+        opacity: 0.8,
+        transparent: true,
+        depthWrite: false,
+    })
+
+
+    this.t1 = new gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__["TweenMax"]({ paused: false })
+
+    ring.rotateX(2);
+    mesh.add(ring)
+    scene.add(mesh);
+
+    var r = 290;
+    var theta = 0;
+    var dTheta = 2 * Math.PI / 10000;
+
+
+    this.update = function (time) {
+        // const scale = Math.sin(time) + 2;
+        mesh.rotateY(.004)
+        // mesh.translateX(.25);
+        theta += dTheta;
+        mesh.position.x = r * Math.cos(theta);
+        mesh.position.z = r * Math.sin(theta);
+
+    }
+}
+/* harmony default export */ __webpack_exports__["default"] = (UranusPlanet);
+
+/***/ }),
+
+/***/ "./js/sceneSubjects/planetSubjects/venusPlanet.js":
+/*!********************************************************!*\
+  !*** ./js/sceneSubjects/planetSubjects/venusPlanet.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap/TweenMax */ "./node_modules/gsap/TweenMax.js");
+
+
+
+
+
+function VenusPlanet(scene) {
+
+
+    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](3, 16, 16);
+    var material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({});
+    material.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/venusmapthumb.jpg');
+    material.bumpMap = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/venusbumpthumb.jpg')
+    material.bumpScale = 0.05
+
+    var mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
+    mesh.position.set(4, 0, 0);
+
+
+    var geometry1 = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](2, 32, 32)
+    var material1 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({
+        side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
+        opacity: 0.8,
+        transparent: true,
+        depthWrite: false,
+    })
+    // var cloudMesh = new THREE.Mesh(geometry1, material1)
+
+
+    var r = 45;
+    var theta = 0;
+    var dTheta = 2 * Math.PI / 1000;
+
+    scene.add(mesh);
+    this.update = function (time) {
+        mesh.rotateY(.004)
+        theta += dTheta;
+        mesh.position.x = r * Math.cos(theta);
+        mesh.position.z = r * Math.sin(theta);
+    }
+}
+/* harmony default export */ __webpack_exports__["default"] = (VenusPlanet);
 
 
 
@@ -472,6 +1133,109 @@ function starSubjects(scene) {
 
 /***/ }),
 
+/***/ "./js/sceneSubjects/ufo.js":
+/*!*********************************!*\
+  !*** ./js/sceneSubjects/ufo.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap/TweenMax */ "./node_modules/gsap/TweenMax.js");
+/* harmony import */ var three_examples_jsm_loaders_OBJLoader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three/examples/jsm/loaders/OBJLoader */ "./node_modules/three/examples/jsm/loaders/OBJLoader.js");
+/* harmony import */ var three_examples_jsm_loaders_MTLLoader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! three/examples/jsm/loaders/MTLLoader */ "./node_modules/three/examples/jsm/loaders/MTLLoader.js");
+
+
+
+
+
+
+
+
+function UFO(scene, location, camera) {
+    this.rocketShip = new three__WEBPACK_IMPORTED_MODULE_0__["Group"]()
+    this.fireShip = new three__WEBPACK_IMPORTED_MODULE_0__["Group"]()
+    const mtlLoader = new three_examples_jsm_loaders_MTLLoader__WEBPACK_IMPORTED_MODULE_3__["MTLLoader"]();
+    var light = new three__WEBPACK_IMPORTED_MODULE_0__["PointLight"](0xffffff, 1);
+
+    mtlLoader.load('../../images/RocketShipMaterial.mtl', materials => {
+        materials.preload();
+        const objLoader = new three_examples_jsm_loaders_OBJLoader__WEBPACK_IMPORTED_MODULE_2__["OBJLoader"]();
+        objLoader.setMaterials(materials);
+        objLoader.load('../../images/RocketShip.obj', obj => {
+            // obj.rotateX(-3.5708);
+            obj.rotateY(-3.1);
+            obj.scale.set(.06,.06,.06);
+            obj.position.set(location[0] - 5, location[1] - 3, location[2] - 13);
+            this.rocketShip.add(obj)
+
+            
+        });
+    });
+
+    mtlLoader.load('../../images/rocketFire.mtl', materials => {
+        materials.preload();
+        const objLoader = new three_examples_jsm_loaders_OBJLoader__WEBPACK_IMPORTED_MODULE_2__["OBJLoader"]();
+        objLoader.setMaterials(materials);
+        objLoader.load('../../images/rocketFire.obj', obj => {
+            // obj.rotateX(-3.5708);
+            // obj.rotateY(3.1);
+            obj.scale.set(.06, .06, .06);
+            obj.position.set(location[0] - 5, location[1] - 4, location[2] - 13);
+            obj.castShadow = true;
+            // obj.materials.opacity = .5;
+            // obj.materials.transparent = true;
+            // light.add(obj)
+            this.fireShip.add(obj)
+            // light.add(this.fireShip)
+            
+
+        });
+    });
+    
+    // var tex = THREE.ImageUtils.loadTexture("./images/Fire.png");
+    // var fire = new THREE.Fire(tex);
+    
+    // fire.position.set(.5,0,0)
+    // scene.add(fire);
+    
+    this.rocketShip.add(camera)
+    scene.add(this.rocketShip);
+    scene.add(this.fireShip)
+    this.updateLocation = function(location){
+       this.fireShip.position.set(location[0], location[1], location[2])
+       this.rocketShip.position.set(location[0],location[1],location[2])
+
+        
+    }
+
+    
+
+    this.updateRotation = function (rotationX, rotationY, rotationZ) {
+        this.fireShip.rotateX(rotationX)
+        this.fireShip.rotateY(rotationY)
+        this.fireShip.rotateZ(rotationZ)
+        this.rocketShip.rotateX(rotationX);
+        this.rocketShip.rotateY(rotationY);
+        this.rocketShip.rotateZ(rotationZ);
+    }
+
+    this.update = function (time) {
+        if (Math.floor(time) % 2 === 0){
+            this.fireShip.visible = true;
+        }else{
+            this.fireShip.visible = false;
+        }
+        // this.fireShip.position.z = newPos + .05
+        // mesh.scale.set(scale, scale, scale);
+    }
+}
+/* harmony default export */ __webpack_exports__["default"] = (UFO);
+
+/***/ }),
+
 /***/ "./main.js":
 /*!*****************!*\
   !*** ./main.js ***!
@@ -484,8 +1248,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_sceneManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./js/sceneManager */ "./js/sceneManager.js");
 /* harmony import */ var Three_examples_jsm_controls_OrbitControls_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! Three/examples/jsm/controls/OrbitControls.js */ "./node_modules/Three/examples/jsm/controls/OrbitControls.js");
 
-// import * as THREE from 'three';
-// import OrbitControls from 'three-orbitcontrols';
 
 
 
@@ -499,7 +1261,9 @@ document.body.appendChild(sceneManager.renderer.domElement);
 const controls = new Three_examples_jsm_controls_OrbitControls_js__WEBPACK_IMPORTED_MODULE_1__["OrbitControls"](sceneManager.camera, sceneManager.renderer.domElement);
 controls.addEventListener('change', () => sceneManager.renderer.render(sceneManager.scene, sceneManager.camera));
 
+document.addEventListener('keydown', (e) => sceneManager.moveRocket(e.keyCode))
 
+// sceneManager.moveRocket()
 
 function bindEventListeners() {
     window.onresize = resizeCanvas;
@@ -509,7 +1273,7 @@ function bindEventListeners() {
 function resizeCanvas() {
     canvas.style.width = '100%';
     canvas.style.height = '100%';
-    canvas.style.backgroundColor = "#000"
+    canvas.style.backgroundColor = "#0d00"
     canvas.style.margin = "0px"
 
     canvas.width = canvas.offsetWidth;
@@ -109415,6 +110179,1362 @@ if ( typeof __THREE_DEVTOOLS__ !== 'undefined' ) {
 	/* eslint-enable no-undef */
 
 }
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/three/examples/jsm/loaders/MTLLoader.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/three/examples/jsm/loaders/MTLLoader.js ***!
+  \**************************************************************/
+/*! exports provided: MTLLoader */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MTLLoader", function() { return MTLLoader; });
+/* harmony import */ var _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../build/three.module.js */ "./node_modules/three/build/three.module.js");
+/**
+ * Loads a Wavefront .mtl file specifying materials
+ *
+ * @author angelxuanchang
+ */
+
+
+
+var MTLLoader = function ( manager ) {
+
+	_build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Loader"].call( this, manager );
+
+};
+
+MTLLoader.prototype = Object.assign( Object.create( _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Loader"].prototype ), {
+
+	constructor: MTLLoader,
+
+	/**
+	 * Loads and parses a MTL asset from a URL.
+	 *
+	 * @param {String} url - URL to the MTL file.
+	 * @param {Function} [onLoad] - Callback invoked with the loaded object.
+	 * @param {Function} [onProgress] - Callback for download progress.
+	 * @param {Function} [onError] - Callback for download errors.
+	 *
+	 * @see setPath setResourcePath
+	 *
+	 * @note In order for relative texture references to resolve correctly
+	 * you must call setResourcePath() explicitly prior to load.
+	 */
+	load: function ( url, onLoad, onProgress, onError ) {
+
+		var scope = this;
+
+		var path = ( this.path === '' ) ? _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["LoaderUtils"].extractUrlBase( url ) : this.path;
+
+		var loader = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["FileLoader"]( this.manager );
+		loader.setPath( this.path );
+		loader.load( url, function ( text ) {
+
+			onLoad( scope.parse( text, path ) );
+
+		}, onProgress, onError );
+
+	},
+
+	setMaterialOptions: function ( value ) {
+
+		this.materialOptions = value;
+		return this;
+
+	},
+
+	/**
+	 * Parses a MTL file.
+	 *
+	 * @param {String} text - Content of MTL file
+	 * @return {MTLLoader.MaterialCreator}
+	 *
+	 * @see setPath setResourcePath
+	 *
+	 * @note In order for relative texture references to resolve correctly
+	 * you must call setResourcePath() explicitly prior to parse.
+	 */
+	parse: function ( text, path ) {
+
+		var lines = text.split( '\n' );
+		var info = {};
+		var delimiter_pattern = /\s+/;
+		var materialsInfo = {};
+
+		for ( var i = 0; i < lines.length; i ++ ) {
+
+			var line = lines[ i ];
+			line = line.trim();
+
+			if ( line.length === 0 || line.charAt( 0 ) === '#' ) {
+
+				// Blank line or comment ignore
+				continue;
+
+			}
+
+			var pos = line.indexOf( ' ' );
+
+			var key = ( pos >= 0 ) ? line.substring( 0, pos ) : line;
+			key = key.toLowerCase();
+
+			var value = ( pos >= 0 ) ? line.substring( pos + 1 ) : '';
+			value = value.trim();
+
+			if ( key === 'newmtl' ) {
+
+				// New material
+
+				info = { name: value };
+				materialsInfo[ value ] = info;
+
+			} else {
+
+				if ( key === 'ka' || key === 'kd' || key === 'ks' || key === 'ke' ) {
+
+					var ss = value.split( delimiter_pattern, 3 );
+					info[ key ] = [ parseFloat( ss[ 0 ] ), parseFloat( ss[ 1 ] ), parseFloat( ss[ 2 ] ) ];
+
+				} else {
+
+					info[ key ] = value;
+
+				}
+
+			}
+
+		}
+
+		var materialCreator = new MTLLoader.MaterialCreator( this.resourcePath || path, this.materialOptions );
+		materialCreator.setCrossOrigin( this.crossOrigin );
+		materialCreator.setManager( this.manager );
+		materialCreator.setMaterials( materialsInfo );
+		return materialCreator;
+
+	}
+
+} );
+
+/**
+ * Create a new THREE-MTLLoader.MaterialCreator
+ * @param baseUrl - Url relative to which textures are loaded
+ * @param options - Set of options on how to construct the materials
+ *                  side: Which side to apply the material
+ *                        FrontSide (default), THREE.BackSide, THREE.DoubleSide
+ *                  wrap: What type of wrapping to apply for textures
+ *                        RepeatWrapping (default), THREE.ClampToEdgeWrapping, THREE.MirroredRepeatWrapping
+ *                  normalizeRGB: RGBs need to be normalized to 0-1 from 0-255
+ *                                Default: false, assumed to be already normalized
+ *                  ignoreZeroRGBs: Ignore values of RGBs (Ka,Kd,Ks) that are all 0's
+ *                                  Default: false
+ * @constructor
+ */
+
+MTLLoader.MaterialCreator = function ( baseUrl, options ) {
+
+	this.baseUrl = baseUrl || '';
+	this.options = options;
+	this.materialsInfo = {};
+	this.materials = {};
+	this.materialsArray = [];
+	this.nameLookup = {};
+
+	this.side = ( this.options && this.options.side ) ? this.options.side : _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["FrontSide"];
+	this.wrap = ( this.options && this.options.wrap ) ? this.options.wrap : _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["RepeatWrapping"];
+
+};
+
+MTLLoader.MaterialCreator.prototype = {
+
+	constructor: MTLLoader.MaterialCreator,
+
+	crossOrigin: 'anonymous',
+
+	setCrossOrigin: function ( value ) {
+
+		this.crossOrigin = value;
+		return this;
+
+	},
+
+	setManager: function ( value ) {
+
+		this.manager = value;
+
+	},
+
+	setMaterials: function ( materialsInfo ) {
+
+		this.materialsInfo = this.convert( materialsInfo );
+		this.materials = {};
+		this.materialsArray = [];
+		this.nameLookup = {};
+
+	},
+
+	convert: function ( materialsInfo ) {
+
+		if ( ! this.options ) return materialsInfo;
+
+		var converted = {};
+
+		for ( var mn in materialsInfo ) {
+
+			// Convert materials info into normalized form based on options
+
+			var mat = materialsInfo[ mn ];
+
+			var covmat = {};
+
+			converted[ mn ] = covmat;
+
+			for ( var prop in mat ) {
+
+				var save = true;
+				var value = mat[ prop ];
+				var lprop = prop.toLowerCase();
+
+				switch ( lprop ) {
+
+					case 'kd':
+					case 'ka':
+					case 'ks':
+
+						// Diffuse color (color under white light) using RGB values
+
+						if ( this.options && this.options.normalizeRGB ) {
+
+							value = [ value[ 0 ] / 255, value[ 1 ] / 255, value[ 2 ] / 255 ];
+
+						}
+
+						if ( this.options && this.options.ignoreZeroRGBs ) {
+
+							if ( value[ 0 ] === 0 && value[ 1 ] === 0 && value[ 2 ] === 0 ) {
+
+								// ignore
+
+								save = false;
+
+							}
+
+						}
+
+						break;
+
+					default:
+
+						break;
+
+				}
+
+				if ( save ) {
+
+					covmat[ lprop ] = value;
+
+				}
+
+			}
+
+		}
+
+		return converted;
+
+	},
+
+	preload: function () {
+
+		for ( var mn in this.materialsInfo ) {
+
+			this.create( mn );
+
+		}
+
+	},
+
+	getIndex: function ( materialName ) {
+
+		return this.nameLookup[ materialName ];
+
+	},
+
+	getAsArray: function () {
+
+		var index = 0;
+
+		for ( var mn in this.materialsInfo ) {
+
+			this.materialsArray[ index ] = this.create( mn );
+			this.nameLookup[ mn ] = index;
+			index ++;
+
+		}
+
+		return this.materialsArray;
+
+	},
+
+	create: function ( materialName ) {
+
+		if ( this.materials[ materialName ] === undefined ) {
+
+			this.createMaterial_( materialName );
+
+		}
+
+		return this.materials[ materialName ];
+
+	},
+
+	createMaterial_: function ( materialName ) {
+
+		// Create material
+
+		var scope = this;
+		var mat = this.materialsInfo[ materialName ];
+		var params = {
+
+			name: materialName,
+			side: this.side
+
+		};
+
+		function resolveURL( baseUrl, url ) {
+
+			if ( typeof url !== 'string' || url === '' )
+				return '';
+
+			// Absolute URL
+			if ( /^https?:\/\//i.test( url ) ) return url;
+
+			return baseUrl + url;
+
+		}
+
+		function setMapForType( mapType, value ) {
+
+			if ( params[ mapType ] ) return; // Keep the first encountered texture
+
+			var texParams = scope.getTextureParams( value, params );
+			var map = scope.loadTexture( resolveURL( scope.baseUrl, texParams.url ) );
+
+			map.repeat.copy( texParams.scale );
+			map.offset.copy( texParams.offset );
+
+			map.wrapS = scope.wrap;
+			map.wrapT = scope.wrap;
+
+			params[ mapType ] = map;
+
+		}
+
+		for ( var prop in mat ) {
+
+			var value = mat[ prop ];
+			var n;
+
+			if ( value === '' ) continue;
+
+			switch ( prop.toLowerCase() ) {
+
+				// Ns is material specular exponent
+
+				case 'kd':
+
+					// Diffuse color (color under white light) using RGB values
+
+					params.color = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Color"]().fromArray( value );
+
+					break;
+
+				case 'ks':
+
+					// Specular color (color when light is reflected from shiny surface) using RGB values
+					params.specular = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Color"]().fromArray( value );
+
+					break;
+
+				case 'ke':
+
+					// Emissive using RGB values
+					params.emissive = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Color"]().fromArray( value );
+
+					break;
+
+				case 'map_kd':
+
+					// Diffuse texture map
+
+					setMapForType( "map", value );
+
+					break;
+
+				case 'map_ks':
+
+					// Specular map
+
+					setMapForType( "specularMap", value );
+
+					break;
+
+				case 'map_ke':
+
+					// Emissive map
+
+					setMapForType( "emissiveMap", value );
+
+					break;
+
+				case 'norm':
+
+					setMapForType( "normalMap", value );
+
+					break;
+
+				case 'map_bump':
+				case 'bump':
+
+					// Bump texture map
+
+					setMapForType( "bumpMap", value );
+
+					break;
+
+				case 'map_d':
+
+					// Alpha map
+
+					setMapForType( "alphaMap", value );
+					params.transparent = true;
+
+					break;
+
+				case 'ns':
+
+					// The specular exponent (defines the focus of the specular highlight)
+					// A high exponent results in a tight, concentrated highlight. Ns values normally range from 0 to 1000.
+
+					params.shininess = parseFloat( value );
+
+					break;
+
+				case 'd':
+					n = parseFloat( value );
+
+					if ( n < 1 ) {
+
+						params.opacity = n;
+						params.transparent = true;
+
+					}
+
+					break;
+
+				case 'tr':
+					n = parseFloat( value );
+
+					if ( this.options && this.options.invertTrProperty ) n = 1 - n;
+
+					if ( n > 0 ) {
+
+						params.opacity = 1 - n;
+						params.transparent = true;
+
+					}
+
+					break;
+
+				default:
+					break;
+
+			}
+
+		}
+
+		this.materials[ materialName ] = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]( params );
+		return this.materials[ materialName ];
+
+	},
+
+	getTextureParams: function ( value, matParams ) {
+
+		var texParams = {
+
+			scale: new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Vector2"]( 1, 1 ),
+			offset: new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Vector2"]( 0, 0 )
+
+		 };
+
+		var items = value.split( /\s+/ );
+		var pos;
+
+		pos = items.indexOf( '-bm' );
+
+		if ( pos >= 0 ) {
+
+			matParams.bumpScale = parseFloat( items[ pos + 1 ] );
+			items.splice( pos, 2 );
+
+		}
+
+		pos = items.indexOf( '-s' );
+
+		if ( pos >= 0 ) {
+
+			texParams.scale.set( parseFloat( items[ pos + 1 ] ), parseFloat( items[ pos + 2 ] ) );
+			items.splice( pos, 4 ); // we expect 3 parameters here!
+
+		}
+
+		pos = items.indexOf( '-o' );
+
+		if ( pos >= 0 ) {
+
+			texParams.offset.set( parseFloat( items[ pos + 1 ] ), parseFloat( items[ pos + 2 ] ) );
+			items.splice( pos, 4 ); // we expect 3 parameters here!
+
+		}
+
+		texParams.url = items.join( ' ' ).trim();
+		return texParams;
+
+	},
+
+	loadTexture: function ( url, mapping, onLoad, onProgress, onError ) {
+
+		var texture;
+		var manager = ( this.manager !== undefined ) ? this.manager : _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["DefaultLoadingManager"];
+		var loader = manager.getHandler( url );
+
+		if ( loader === null ) {
+
+			loader = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["TextureLoader"]( manager );
+
+		}
+
+		if ( loader.setCrossOrigin ) loader.setCrossOrigin( this.crossOrigin );
+		texture = loader.load( url, onLoad, onProgress, onError );
+
+		if ( mapping !== undefined ) texture.mapping = mapping;
+
+		return texture;
+
+	}
+
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/three/examples/jsm/loaders/OBJLoader.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/three/examples/jsm/loaders/OBJLoader.js ***!
+  \**************************************************************/
+/*! exports provided: OBJLoader */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OBJLoader", function() { return OBJLoader; });
+/* harmony import */ var _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../build/three.module.js */ "./node_modules/three/build/three.module.js");
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
+
+
+var OBJLoader = ( function () {
+
+	// o object_name | g group_name
+	var object_pattern = /^[og]\s*(.+)?/;
+	// mtllib file_reference
+	var material_library_pattern = /^mtllib /;
+	// usemtl material_name
+	var material_use_pattern = /^usemtl /;
+
+	function ParserState() {
+
+		var state = {
+			objects: [],
+			object: {},
+
+			vertices: [],
+			normals: [],
+			colors: [],
+			uvs: [],
+
+			materialLibraries: [],
+
+			startObject: function ( name, fromDeclaration ) {
+
+				// If the current object (initial from reset) is not from a g/o declaration in the parsed
+				// file. We need to use it for the first parsed g/o to keep things in sync.
+				if ( this.object && this.object.fromDeclaration === false ) {
+
+					this.object.name = name;
+					this.object.fromDeclaration = ( fromDeclaration !== false );
+					return;
+
+				}
+
+				var previousMaterial = ( this.object && typeof this.object.currentMaterial === 'function' ? this.object.currentMaterial() : undefined );
+
+				if ( this.object && typeof this.object._finalize === 'function' ) {
+
+					this.object._finalize( true );
+
+				}
+
+				this.object = {
+					name: name || '',
+					fromDeclaration: ( fromDeclaration !== false ),
+
+					geometry: {
+						vertices: [],
+						normals: [],
+						colors: [],
+						uvs: []
+					},
+					materials: [],
+					smooth: true,
+
+					startMaterial: function ( name, libraries ) {
+
+						var previous = this._finalize( false );
+
+						// New usemtl declaration overwrites an inherited material, except if faces were declared
+						// after the material, then it must be preserved for proper MultiMaterial continuation.
+						if ( previous && ( previous.inherited || previous.groupCount <= 0 ) ) {
+
+							this.materials.splice( previous.index, 1 );
+
+						}
+
+						var material = {
+							index: this.materials.length,
+							name: name || '',
+							mtllib: ( Array.isArray( libraries ) && libraries.length > 0 ? libraries[ libraries.length - 1 ] : '' ),
+							smooth: ( previous !== undefined ? previous.smooth : this.smooth ),
+							groupStart: ( previous !== undefined ? previous.groupEnd : 0 ),
+							groupEnd: - 1,
+							groupCount: - 1,
+							inherited: false,
+
+							clone: function ( index ) {
+
+								var cloned = {
+									index: ( typeof index === 'number' ? index : this.index ),
+									name: this.name,
+									mtllib: this.mtllib,
+									smooth: this.smooth,
+									groupStart: 0,
+									groupEnd: - 1,
+									groupCount: - 1,
+									inherited: false
+								};
+								cloned.clone = this.clone.bind( cloned );
+								return cloned;
+
+							}
+						};
+
+						this.materials.push( material );
+
+						return material;
+
+					},
+
+					currentMaterial: function () {
+
+						if ( this.materials.length > 0 ) {
+
+							return this.materials[ this.materials.length - 1 ];
+
+						}
+
+						return undefined;
+
+					},
+
+					_finalize: function ( end ) {
+
+						var lastMultiMaterial = this.currentMaterial();
+						if ( lastMultiMaterial && lastMultiMaterial.groupEnd === - 1 ) {
+
+							lastMultiMaterial.groupEnd = this.geometry.vertices.length / 3;
+							lastMultiMaterial.groupCount = lastMultiMaterial.groupEnd - lastMultiMaterial.groupStart;
+							lastMultiMaterial.inherited = false;
+
+						}
+
+						// Ignore objects tail materials if no face declarations followed them before a new o/g started.
+						if ( end && this.materials.length > 1 ) {
+
+							for ( var mi = this.materials.length - 1; mi >= 0; mi -- ) {
+
+								if ( this.materials[ mi ].groupCount <= 0 ) {
+
+									this.materials.splice( mi, 1 );
+
+								}
+
+							}
+
+						}
+
+						// Guarantee at least one empty material, this makes the creation later more straight forward.
+						if ( end && this.materials.length === 0 ) {
+
+							this.materials.push( {
+								name: '',
+								smooth: this.smooth
+							} );
+
+						}
+
+						return lastMultiMaterial;
+
+					}
+				};
+
+				// Inherit previous objects material.
+				// Spec tells us that a declared material must be set to all objects until a new material is declared.
+				// If a usemtl declaration is encountered while this new object is being parsed, it will
+				// overwrite the inherited material. Exception being that there was already face declarations
+				// to the inherited material, then it will be preserved for proper MultiMaterial continuation.
+
+				if ( previousMaterial && previousMaterial.name && typeof previousMaterial.clone === 'function' ) {
+
+					var declared = previousMaterial.clone( 0 );
+					declared.inherited = true;
+					this.object.materials.push( declared );
+
+				}
+
+				this.objects.push( this.object );
+
+			},
+
+			finalize: function () {
+
+				if ( this.object && typeof this.object._finalize === 'function' ) {
+
+					this.object._finalize( true );
+
+				}
+
+			},
+
+			parseVertexIndex: function ( value, len ) {
+
+				var index = parseInt( value, 10 );
+				return ( index >= 0 ? index - 1 : index + len / 3 ) * 3;
+
+			},
+
+			parseNormalIndex: function ( value, len ) {
+
+				var index = parseInt( value, 10 );
+				return ( index >= 0 ? index - 1 : index + len / 3 ) * 3;
+
+			},
+
+			parseUVIndex: function ( value, len ) {
+
+				var index = parseInt( value, 10 );
+				return ( index >= 0 ? index - 1 : index + len / 2 ) * 2;
+
+			},
+
+			addVertex: function ( a, b, c ) {
+
+				var src = this.vertices;
+				var dst = this.object.geometry.vertices;
+
+				dst.push( src[ a + 0 ], src[ a + 1 ], src[ a + 2 ] );
+				dst.push( src[ b + 0 ], src[ b + 1 ], src[ b + 2 ] );
+				dst.push( src[ c + 0 ], src[ c + 1 ], src[ c + 2 ] );
+
+			},
+
+			addVertexPoint: function ( a ) {
+
+				var src = this.vertices;
+				var dst = this.object.geometry.vertices;
+
+				dst.push( src[ a + 0 ], src[ a + 1 ], src[ a + 2 ] );
+
+			},
+
+			addVertexLine: function ( a ) {
+
+				var src = this.vertices;
+				var dst = this.object.geometry.vertices;
+
+				dst.push( src[ a + 0 ], src[ a + 1 ], src[ a + 2 ] );
+
+			},
+
+			addNormal: function ( a, b, c ) {
+
+				var src = this.normals;
+				var dst = this.object.geometry.normals;
+
+				dst.push( src[ a + 0 ], src[ a + 1 ], src[ a + 2 ] );
+				dst.push( src[ b + 0 ], src[ b + 1 ], src[ b + 2 ] );
+				dst.push( src[ c + 0 ], src[ c + 1 ], src[ c + 2 ] );
+
+			},
+
+			addColor: function ( a, b, c ) {
+
+				var src = this.colors;
+				var dst = this.object.geometry.colors;
+
+				dst.push( src[ a + 0 ], src[ a + 1 ], src[ a + 2 ] );
+				dst.push( src[ b + 0 ], src[ b + 1 ], src[ b + 2 ] );
+				dst.push( src[ c + 0 ], src[ c + 1 ], src[ c + 2 ] );
+
+			},
+
+			addUV: function ( a, b, c ) {
+
+				var src = this.uvs;
+				var dst = this.object.geometry.uvs;
+
+				dst.push( src[ a + 0 ], src[ a + 1 ] );
+				dst.push( src[ b + 0 ], src[ b + 1 ] );
+				dst.push( src[ c + 0 ], src[ c + 1 ] );
+
+			},
+
+			addUVLine: function ( a ) {
+
+				var src = this.uvs;
+				var dst = this.object.geometry.uvs;
+
+				dst.push( src[ a + 0 ], src[ a + 1 ] );
+
+			},
+
+			addFace: function ( a, b, c, ua, ub, uc, na, nb, nc ) {
+
+				var vLen = this.vertices.length;
+
+				var ia = this.parseVertexIndex( a, vLen );
+				var ib = this.parseVertexIndex( b, vLen );
+				var ic = this.parseVertexIndex( c, vLen );
+
+				this.addVertex( ia, ib, ic );
+
+				if ( this.colors.length > 0 ) {
+
+					this.addColor( ia, ib, ic );
+
+				}
+
+				if ( ua !== undefined && ua !== '' ) {
+
+					var uvLen = this.uvs.length;
+					ia = this.parseUVIndex( ua, uvLen );
+					ib = this.parseUVIndex( ub, uvLen );
+					ic = this.parseUVIndex( uc, uvLen );
+					this.addUV( ia, ib, ic );
+
+				}
+
+				if ( na !== undefined && na !== '' ) {
+
+					// Normals are many times the same. If so, skip function call and parseInt.
+					var nLen = this.normals.length;
+					ia = this.parseNormalIndex( na, nLen );
+
+					ib = na === nb ? ia : this.parseNormalIndex( nb, nLen );
+					ic = na === nc ? ia : this.parseNormalIndex( nc, nLen );
+
+					this.addNormal( ia, ib, ic );
+
+				}
+
+			},
+
+			addPointGeometry: function ( vertices ) {
+
+				this.object.geometry.type = 'Points';
+
+				var vLen = this.vertices.length;
+
+				for ( var vi = 0, l = vertices.length; vi < l; vi ++ ) {
+
+					this.addVertexPoint( this.parseVertexIndex( vertices[ vi ], vLen ) );
+
+				}
+
+			},
+
+			addLineGeometry: function ( vertices, uvs ) {
+
+				this.object.geometry.type = 'Line';
+
+				var vLen = this.vertices.length;
+				var uvLen = this.uvs.length;
+
+				for ( var vi = 0, l = vertices.length; vi < l; vi ++ ) {
+
+					this.addVertexLine( this.parseVertexIndex( vertices[ vi ], vLen ) );
+
+				}
+
+				for ( var uvi = 0, l = uvs.length; uvi < l; uvi ++ ) {
+
+					this.addUVLine( this.parseUVIndex( uvs[ uvi ], uvLen ) );
+
+				}
+
+			}
+
+		};
+
+		state.startObject( '', false );
+
+		return state;
+
+	}
+
+	//
+
+	function OBJLoader( manager ) {
+
+		_build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Loader"].call( this, manager );
+
+		this.materials = null;
+
+	}
+
+	OBJLoader.prototype = Object.assign( Object.create( _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Loader"].prototype ), {
+
+		constructor: OBJLoader,
+
+		load: function ( url, onLoad, onProgress, onError ) {
+
+			var scope = this;
+
+			var loader = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["FileLoader"]( scope.manager );
+			loader.setPath( this.path );
+			loader.load( url, function ( text ) {
+
+				onLoad( scope.parse( text ) );
+
+			}, onProgress, onError );
+
+		},
+
+		setMaterials: function ( materials ) {
+
+			this.materials = materials;
+
+			return this;
+
+		},
+
+		parse: function ( text ) {
+
+			console.time( 'OBJLoader' );
+
+			var state = new ParserState();
+
+			if ( text.indexOf( '\r\n' ) !== - 1 ) {
+
+				// This is faster than String.split with regex that splits on both
+				text = text.replace( /\r\n/g, '\n' );
+
+			}
+
+			if ( text.indexOf( '\\\n' ) !== - 1 ) {
+
+				// join lines separated by a line continuation character (\)
+				text = text.replace( /\\\n/g, '' );
+
+			}
+
+			var lines = text.split( '\n' );
+			var line = '', lineFirstChar = '';
+			var lineLength = 0;
+			var result = [];
+
+			// Faster to just trim left side of the line. Use if available.
+			var trimLeft = ( typeof ''.trimLeft === 'function' );
+
+			for ( var i = 0, l = lines.length; i < l; i ++ ) {
+
+				line = lines[ i ];
+
+				line = trimLeft ? line.trimLeft() : line.trim();
+
+				lineLength = line.length;
+
+				if ( lineLength === 0 ) continue;
+
+				lineFirstChar = line.charAt( 0 );
+
+				// @todo invoke passed in handler if any
+				if ( lineFirstChar === '#' ) continue;
+
+				if ( lineFirstChar === 'v' ) {
+
+					var data = line.split( /\s+/ );
+
+					switch ( data[ 0 ] ) {
+
+						case 'v':
+							state.vertices.push(
+								parseFloat( data[ 1 ] ),
+								parseFloat( data[ 2 ] ),
+								parseFloat( data[ 3 ] )
+							);
+							if ( data.length >= 7 ) {
+
+								state.colors.push(
+									parseFloat( data[ 4 ] ),
+									parseFloat( data[ 5 ] ),
+									parseFloat( data[ 6 ] )
+
+								);
+
+							}
+							break;
+						case 'vn':
+							state.normals.push(
+								parseFloat( data[ 1 ] ),
+								parseFloat( data[ 2 ] ),
+								parseFloat( data[ 3 ] )
+							);
+							break;
+						case 'vt':
+							state.uvs.push(
+								parseFloat( data[ 1 ] ),
+								parseFloat( data[ 2 ] )
+							);
+							break;
+
+					}
+
+				} else if ( lineFirstChar === 'f' ) {
+
+					var lineData = line.substr( 1 ).trim();
+					var vertexData = lineData.split( /\s+/ );
+					var faceVertices = [];
+
+					// Parse the face vertex data into an easy to work with format
+
+					for ( var j = 0, jl = vertexData.length; j < jl; j ++ ) {
+
+						var vertex = vertexData[ j ];
+
+						if ( vertex.length > 0 ) {
+
+							var vertexParts = vertex.split( '/' );
+							faceVertices.push( vertexParts );
+
+						}
+
+					}
+
+					// Draw an edge between the first vertex and all subsequent vertices to form an n-gon
+
+					var v1 = faceVertices[ 0 ];
+
+					for ( var j = 1, jl = faceVertices.length - 1; j < jl; j ++ ) {
+
+						var v2 = faceVertices[ j ];
+						var v3 = faceVertices[ j + 1 ];
+
+						state.addFace(
+							v1[ 0 ], v2[ 0 ], v3[ 0 ],
+							v1[ 1 ], v2[ 1 ], v3[ 1 ],
+							v1[ 2 ], v2[ 2 ], v3[ 2 ]
+						);
+
+					}
+
+				} else if ( lineFirstChar === 'l' ) {
+
+					var lineParts = line.substring( 1 ).trim().split( " " );
+					var lineVertices = [], lineUVs = [];
+
+					if ( line.indexOf( "/" ) === - 1 ) {
+
+						lineVertices = lineParts;
+
+					} else {
+
+						for ( var li = 0, llen = lineParts.length; li < llen; li ++ ) {
+
+							var parts = lineParts[ li ].split( "/" );
+
+							if ( parts[ 0 ] !== "" ) lineVertices.push( parts[ 0 ] );
+							if ( parts[ 1 ] !== "" ) lineUVs.push( parts[ 1 ] );
+
+						}
+
+					}
+					state.addLineGeometry( lineVertices, lineUVs );
+
+				} else if ( lineFirstChar === 'p' ) {
+
+					var lineData = line.substr( 1 ).trim();
+					var pointData = lineData.split( " " );
+
+					state.addPointGeometry( pointData );
+
+				} else if ( ( result = object_pattern.exec( line ) ) !== null ) {
+
+					// o object_name
+					// or
+					// g group_name
+
+					// WORKAROUND: https://bugs.chromium.org/p/v8/issues/detail?id=2869
+					// var name = result[ 0 ].substr( 1 ).trim();
+					var name = ( " " + result[ 0 ].substr( 1 ).trim() ).substr( 1 );
+
+					state.startObject( name );
+
+				} else if ( material_use_pattern.test( line ) ) {
+
+					// material
+
+					state.object.startMaterial( line.substring( 7 ).trim(), state.materialLibraries );
+
+				} else if ( material_library_pattern.test( line ) ) {
+
+					// mtl file
+
+					state.materialLibraries.push( line.substring( 7 ).trim() );
+
+				} else if ( lineFirstChar === 's' ) {
+
+					result = line.split( ' ' );
+
+					// smooth shading
+
+					// @todo Handle files that have varying smooth values for a set of faces inside one geometry,
+					// but does not define a usemtl for each face set.
+					// This should be detected and a dummy material created (later MultiMaterial and geometry groups).
+					// This requires some care to not create extra material on each smooth value for "normal" obj files.
+					// where explicit usemtl defines geometry groups.
+					// Example asset: examples/models/obj/cerberus/Cerberus.obj
+
+					/*
+					 * http://paulbourke.net/dataformats/obj/
+					 * or
+					 * http://www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf
+					 *
+					 * From chapter "Grouping" Syntax explanation "s group_number":
+					 * "group_number is the smoothing group number. To turn off smoothing groups, use a value of 0 or off.
+					 * Polygonal elements use group numbers to put elements in different smoothing groups. For free-form
+					 * surfaces, smoothing groups are either turned on or off; there is no difference between values greater
+					 * than 0."
+					 */
+					if ( result.length > 1 ) {
+
+						var value = result[ 1 ].trim().toLowerCase();
+						state.object.smooth = ( value !== '0' && value !== 'off' );
+
+					} else {
+
+						// ZBrush can produce "s" lines #11707
+						state.object.smooth = true;
+
+					}
+					var material = state.object.currentMaterial();
+					if ( material ) material.smooth = state.object.smooth;
+
+				} else {
+
+					// Handle null terminated files without exception
+					if ( line === '\0' ) continue;
+
+					throw new Error( 'THREE.OBJLoader: Unexpected line: "' + line + '"' );
+
+				}
+
+			}
+
+			state.finalize();
+
+			var container = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Group"]();
+			container.materialLibraries = [].concat( state.materialLibraries );
+
+			for ( var i = 0, l = state.objects.length; i < l; i ++ ) {
+
+				var object = state.objects[ i ];
+				var geometry = object.geometry;
+				var materials = object.materials;
+				var isLine = ( geometry.type === 'Line' );
+				var isPoints = ( geometry.type === 'Points' );
+				var hasVertexColors = false;
+
+				// Skip o/g line declarations that did not follow with any faces
+				if ( geometry.vertices.length === 0 ) continue;
+
+				var buffergeometry = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["BufferGeometry"]();
+
+				buffergeometry.addAttribute( 'position', new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"]( geometry.vertices, 3 ) );
+
+				if ( geometry.normals.length > 0 ) {
+
+					buffergeometry.addAttribute( 'normal', new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"]( geometry.normals, 3 ) );
+
+				} else {
+
+					buffergeometry.computeVertexNormals();
+
+				}
+
+				if ( geometry.colors.length > 0 ) {
+
+					hasVertexColors = true;
+					buffergeometry.addAttribute( 'color', new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"]( geometry.colors, 3 ) );
+
+				}
+
+				if ( geometry.uvs.length > 0 ) {
+
+					buffergeometry.addAttribute( 'uv', new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"]( geometry.uvs, 2 ) );
+
+				}
+
+				// Create materials
+
+				var createdMaterials = [];
+
+				for ( var mi = 0, miLen = materials.length; mi < miLen; mi ++ ) {
+
+					var sourceMaterial = materials[ mi ];
+					var material = undefined;
+
+					if ( this.materials !== null ) {
+
+						material = this.materials.create( sourceMaterial.name );
+
+						// mtl etc. loaders probably can't create line materials correctly, copy properties to a line material.
+						if ( isLine && material && ! ( material instanceof _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["LineBasicMaterial"] ) ) {
+
+							var materialLine = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["LineBasicMaterial"]();
+							_build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Material"].prototype.copy.call( materialLine, material );
+							materialLine.color.copy( material.color );
+							material = materialLine;
+
+						} else if ( isPoints && material && ! ( material instanceof _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"] ) ) {
+
+							var materialPoints = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]( { size: 10, sizeAttenuation: false } );
+							_build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Material"].prototype.copy.call( materialPoints, material );
+							materialPoints.color.copy( material.color );
+							materialPoints.map = material.map;
+							material = materialPoints;
+
+						}
+
+					}
+
+					if ( ! material ) {
+
+						if ( isLine ) {
+
+							material = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["LineBasicMaterial"]();
+
+						} else if ( isPoints ) {
+
+							material = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]( { size: 1, sizeAttenuation: false } );
+
+						} else {
+
+							material = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]();
+
+						}
+
+						material.name = sourceMaterial.name;
+
+					}
+
+					material.flatShading = sourceMaterial.smooth ? false : true;
+					material.vertexColors = hasVertexColors ? _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["VertexColors"] : _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["NoColors"];
+
+					createdMaterials.push( material );
+
+				}
+
+				// Create mesh
+
+				var mesh;
+
+				if ( createdMaterials.length > 1 ) {
+
+					for ( var mi = 0, miLen = materials.length; mi < miLen; mi ++ ) {
+
+						var sourceMaterial = materials[ mi ];
+						buffergeometry.addGroup( sourceMaterial.groupStart, sourceMaterial.groupCount, mi );
+
+					}
+
+					if ( isLine ) {
+
+						mesh = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["LineSegments"]( buffergeometry, createdMaterials );
+
+					} else if ( isPoints ) {
+
+						mesh = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Points"]( buffergeometry, createdMaterials );
+
+					} else {
+
+						mesh = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Mesh"]( buffergeometry, createdMaterials );
+
+					}
+
+				} else {
+
+					if ( isLine ) {
+
+						mesh = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["LineSegments"]( buffergeometry, createdMaterials[ 0 ] );
+
+					} else if ( isPoints ) {
+
+						mesh = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Points"]( buffergeometry, createdMaterials[ 0 ] );
+
+					} else {
+
+						mesh = new _build_three_module_js__WEBPACK_IMPORTED_MODULE_0__["Mesh"]( buffergeometry, createdMaterials[ 0 ] );
+
+					}
+
+				}
+
+				mesh.name = object.name;
+
+				container.add( mesh );
+
+			}
+
+			console.timeEnd( 'OBJLoader' );
+
+			return container;
+
+		}
+
+	} );
+
+	return OBJLoader;
+
+} )();
 
 
 

@@ -7,10 +7,12 @@ function EarthSubject(scene) {
 
     var light = new THREE.PointLight(0xffffff, 1);
     // const mesh = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(radius, 2), new THREE.MeshStandardMaterial({ flatShading: true }));
-    let geometry = new THREE.SphereGeometry(1, 16, 16);
+    let geometry = new THREE.SphereGeometry(4, 16, 16);
+    // let geometry = new THREE.SphereGeometry(1000, 16, 16);
     // let material = new THREE.MeshPhongMaterial({ color: "0xffffff" });
     let material = new THREE.MeshBasicMaterial({ color: 0xffffff, blending: THREE.AdditiveBlending, transparent: false });
 
+    // material.side = THREE.BackSide;
     
     let mesh = new THREE.Mesh(geometry, material);
     
@@ -21,7 +23,7 @@ function EarthSubject(scene) {
     
     light.add(mesh);
     scene.add(light)
-    mesh.position.set(2, 0, 0);
+    mesh.position.set(0, 0, 0);
     scene.add(mesh);
 
     this.update = function (time) {

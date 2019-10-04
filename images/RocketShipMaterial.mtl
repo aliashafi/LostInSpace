@@ -1,0 +1,12 @@
+newmtl White material_2f1fe10b-9be9-4ed8-abf0-8df7a522b8f5
+Kd 0.904 0.904 0.904
+d 1.000
+newmtl Blue material_f746d65f-2852-47ff-8a9d-182ff9f755a0
+Kd 1.000 1.000 1.000
+d 1.000
+newmtl Material 60_670e41d3-5025-4bc8-8b92-8882ffcc1e88
+Kd 0.904 0.135 0.066
+d 1.000
+newmtl Material 61_f90d9a5c-9ffc-43eb-abe1-8e75b8fa2f6e
+Kd 0.904 0.489 0.230
+d 1.000

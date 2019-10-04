@@ -17,6 +17,17 @@ function GeneralLights(scene) {
     // scene.add(light3);
     // scene.add(light4);
 
+    ///
+    THREE.ImageUtils.crossOrigin = '';
+    var textureFlare0 = THREE.ImageUtils.loadTexture("https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/lensflare/lensflare0.png");
+    var flareColor = new THREE.Color(0xffffff);
+    flareColor.setHSL(0.55, 0.9, 0.5 + 0.5);
+    var lensFlare = new THREE.LensFlare(0,0, flareColor);
+    scene.add(lensFlare);
+    //
+
+    
+
     //adding ambient light
     let ambientLight = new THREE.AmbientLight(0x2c3e50);
     scene.add(ambientLight);
