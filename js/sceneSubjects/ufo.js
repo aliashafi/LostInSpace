@@ -77,7 +77,7 @@ function UFO(scene, location, camera) {
         let collidableMeshList = scene.children
         collidableMeshList = collidableMeshList.filter(subj => subj.name !== "stars")
         let rocketShip = scene.getObjectByName('cube');
-        let originPoint = new THREE.Vector3(w[0], location[1], location[2])
+        let originPoint = new THREE.Vector3([0], location[1], location[2])
         // let originPoint = this.rocketShip.position.clone(); 
         // console.log(originPoint)
 
