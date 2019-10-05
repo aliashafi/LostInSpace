@@ -20,27 +20,20 @@ function PatrickStar(scene) {
 
         });
     });
+    this.PatrickStar.position.set(-40, -90, 0)
 
     scene.add(this.PatrickStar)
     // let pos = 
+    var r = 100;
+    var theta = 0;
+    var dTheta = 1 * Math.PI / 1000;
 
     this.update = function (time) {
-
-       
-            
-        this.PatrickStar.rotateY(.04)
-        this.PatrickStar.rotateX(.04)
-        // this.PatrickStar.position.y += 1
         
+        this.PatrickStar.rotateY(.004)
+        theta += dTheta;
+        this.PatrickStar.position.x = r * Math.sin(theta);
         
-        // }else if (Math.floor(time) % 4 === 0){
-        //     this.PatrickStar.position.x += 4
-        //     this.PatrickStar.position.y -= 4
-        // }else{
-        //     this.PatrickStar.position.x += 1;
-        //     this.PatrickStar.position.y -= 1;
-        // }
-        // mesh.scale.set(scale, scale, scale);
     }
 }
 export default PatrickStar;

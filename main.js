@@ -12,8 +12,10 @@ const controls = new OrbitControls(sceneManager.camera, sceneManager.renderer.do
 controls.addEventListener('change', () => sceneManager.renderer.render(sceneManager.scene, sceneManager.camera));
 let keycode = 9;
 document.addEventListener('keydown', (e) => keycode = e.keyCode);
-// sceneManager.moveRocket(e.keyCode)
-// sceneManager.moveRocket()
+document.addEventListener('keydown', (e) => {
+    console.log(e.keyCode)
+    if (e.keyCode === 71) patrickLeedal();})
+
 bindEventListeners();
 render();
 
@@ -34,7 +36,25 @@ function resizeCanvas() {
     sceneManager.onWindowResize();
 }
 
+function patrickLeedal() {
+    var player = document.getElementById("patrick");
+    setTimeout(playSound, 100)
+    function playSound() {
+        player.play().then(response => {
+            console.log("yes")
+        }).catch(e => {
+            console.log(e);
+        })
+    }
+}
+
+
+
+
+
 function render() {
+
+    
     
     requestAnimationFrame(render);
     if (keycode) sceneManager.moveRocket(keycode);

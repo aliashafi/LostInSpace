@@ -74,7 +74,6 @@ function UFO(scene, location, camera) {
         
 
         ///collision
-        let planets = scene.getObjectByName('sun');
         let collidableMeshList = scene.children
         collidableMeshList = collidableMeshList.filter(subj => subj.name !== "stars")
         let rocketShip = scene.getObjectByName('cube');

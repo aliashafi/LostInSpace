@@ -517,27 +517,20 @@ function PatrickStar(scene) {
 
         });
     });
+    this.PatrickStar.position.set(-40, -90, 0)
 
     scene.add(this.PatrickStar)
     // let pos = 
+    var r = 100;
+    var theta = 0;
+    var dTheta = 1 * Math.PI / 1000;
 
     this.update = function (time) {
-
-       
-            
-        this.PatrickStar.rotateY(.04)
-        this.PatrickStar.rotateX(.04)
-        // this.PatrickStar.position.y += 1
         
+        this.PatrickStar.rotateY(.004)
+        theta += dTheta;
+        this.PatrickStar.position.x = r * Math.sin(theta);
         
-        // }else if (Math.floor(time) % 4 === 0){
-        //     this.PatrickStar.position.x += 4
-        //     this.PatrickStar.position.y -= 4
-        // }else{
-        //     this.PatrickStar.position.x += 1;
-        //     this.PatrickStar.position.y -= 1;
-        // }
-        // mesh.scale.set(scale, scale, scale);
     }
 }
 /* harmony default export */ __webpack_exports__["default"] = (PatrickStar);
@@ -1231,7 +1224,6 @@ function UFO(scene, location, camera) {
         
 
         ///collision
-        let planets = scene.getObjectByName('sun');
         let collidableMeshList = scene.children
         collidableMeshList = collidableMeshList.filter(subj => subj.name !== "stars")
         let rocketShip = scene.getObjectByName('cube');
@@ -1317,8 +1309,10 @@ const controls = new Three_examples_jsm_controls_OrbitControls_js__WEBPACK_IMPOR
 controls.addEventListener('change', () => sceneManager.renderer.render(sceneManager.scene, sceneManager.camera));
 let keycode = 9;
 document.addEventListener('keydown', (e) => keycode = e.keyCode);
-// sceneManager.moveRocket(e.keyCode)
-// sceneManager.moveRocket()
+document.addEventListener('keydown', (e) => {
+    console.log(e.keyCode)
+    if (e.keyCode === 71) patrickLeedal();})
+
 bindEventListeners();
 render();
 
@@ -1339,7 +1333,25 @@ function resizeCanvas() {
     sceneManager.onWindowResize();
 }
 
+function patrickLeedal() {
+    var player = document.getElementById("patrick");
+    setTimeout(playSound, 100)
+    function playSound() {
+        player.play().then(response => {
+            console.log("yes")
+        }).catch(e => {
+            console.log(e);
+        })
+    }
+}
+
+
+
+
+
 function render() {
+
+    
     
     requestAnimationFrame(render);
     if (keycode) sceneManager.moveRocket(keycode);

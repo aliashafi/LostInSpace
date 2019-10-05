@@ -7,9 +7,18 @@
 </head>
 
 <body style="margin: 0px">
-    <canvas id="canvas"></canvas>
+    <canvas style="display: block" id="canvas"></canvas>
+    <audio preload="true" id="patrick" src="music/leedal.mp4" type="audio/mp4">
+    </audio>
+
     <script src="./src/bundle.js"></script>
 
+    
+
+    <audio style="position: absolute; top: 10;" class='audio-control' controls loop controlsList="nodownload" autoplay muted='true'>
+        <source src='music/inspiring-heroic-theme.mp3'>
+    </audio>
+    
 </body>
 
 </html>
