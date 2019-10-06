@@ -1304,6 +1304,23 @@ const sceneManager = new _js_sceneManager__WEBPACK_IMPORTED_MODULE_0__["default"
 
 
 
+let intoMessage = "...Huston, do you read?  We have lost a star in space, will you help us find it?";
+let hint = "One star is not like the rest, press 'G' for clues";
+let i = 0;
+// window.addEventListener("load", () => {
+//     const message = document.getElementById("message");
+    
+// })
+
+function typeMessage() {
+    if (i < intoMessage.length){
+        document.getElementById("message").innerHTML += intoMessage.charAt(i);
+        i ++;
+        setTimeout(typeMessage, 50);
+    }
+}
+typeMessage();
+
 document.body.appendChild(sceneManager.renderer.domElement);
 const controls = new Three_examples_jsm_controls_OrbitControls_js__WEBPACK_IMPORTED_MODULE_1__["OrbitControls"](sceneManager.camera, sceneManager.renderer.domElement);
 controls.addEventListener('change', () => sceneManager.renderer.render(sceneManager.scene, sceneManager.camera));
@@ -1312,6 +1329,9 @@ document.addEventListener('keydown', (e) => keycode = e.keyCode);
 document.addEventListener('keydown', (e) => {
     console.log(e.keyCode)
     if (e.keyCode === 71) patrickLeedal();})
+
+
+
 
 bindEventListeners();
 render();

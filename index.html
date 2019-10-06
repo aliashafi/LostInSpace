@@ -1,9 +1,12 @@
 <html>
 
 <head>
-    <title>My first three.js app</title>
+    <title>LostInSpace</title>
     <style>
     </style>
+
+    <link rel="stylesheet" type="text/css" href="css/main.scss" media="screen" />
+    <link href="https://fonts.googleapis.com/css?family=Geostar+Fill|Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 
 <body style="margin: 0px">
@@ -11,13 +14,22 @@
     <audio preload="true" id="patrick" src="music/leedal.mp4" type="audio/mp4">
     </audio>
 
-    <script src="./src/bundle.js"></script>
+   
 
     
 
     <audio style="position: absolute; top: 10;" class='audio-control' controls loop controlsList="nodownload" autoplay muted='true'>
         <source src='music/inspiring-heroic-theme.mp3'>
     </audio>
+
+    <div class="start-modal">
+        <div class="title">LOST IN SPACE</div>
+        <div id="message"></div>
+
+        <div id="btn">YES</div>
+        <div id="btn">NO, ID RATHER JUST EXPLORE</div>
+    </div>
+    <script src="./src/bundle.js"></script>
     
 </body>
 

@@ -1,3 +1,24 @@
-.audio-control{
-    
+.start-modal{
+    position: absolute;
+    height: 50%;
+    width: 50%;
+    background-color: rgba(8,8,8,.5);
+    z-index: 99999;
+    top: 25%;
+    left: 30%;
+}
+
+.title{
+    color: white;
+    font-family: 'Geostar Fill';
+}
+
+#message{
+    color: white;
+    font-family: 'Geostar Fill';
+}
+
+#btn {
+    color: white;
+    font-family: 'Geostar Fill';
 }
