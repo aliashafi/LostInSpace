@@ -1,5 +1,5 @@
 import SceneManager from './js/sceneManager';
-import { OrbitControls } from 'Three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 
 const canvas = document.getElementById("canvas");
