@@ -4,7 +4,7 @@ import GeneralLights from './sceneSubjects/generalLights';
 import EarthSubject from './sceneSubjects/earthPlanet';
 import StarSubjects from './sceneSubjects/starSubjects';
 import OrbitingPlanet from './sceneSubjects/planetSubjects/orbitingPlanet'
-import SaturnPlanet from './sceneSubjects/planetSubjects/SaturnPlanet'
+import SaturnPlanet from './sceneSubjects/planetSubjects/saturnPlanet'
 import MercuryPlanet from './sceneSubjects/planetSubjects/mercuryPlanet'
 import VenusPlanet from './sceneSubjects/planetSubjects/venusPlanet'
 import MarsPlanet from './sceneSubjects/planetSubjects/marsPlanet'
@@ -15,7 +15,6 @@ import PlutoPlanet from './sceneSubjects/planetSubjects/plutoPlanet'
 import UFO from './sceneSubjects/ufo'
 import MilkyWay from './sceneSubjects/milkyWay'
 import PatrickStar from './sceneSubjects/patrickStar'
-import { timingSafeEqual } from 'crypto';
 
 function SceneManager (canvas){
     const clock = new THREE.Clock();
