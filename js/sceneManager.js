@@ -63,6 +63,11 @@ function SceneManager (canvas){
         this.location = newLocation;
     }
 
+    this.reset = function() {
+        this.location = [10, 10, 100]
+        RocketShip.updateRotation(0,0,0,true)
+    }
+
     function buildScene() {
         const scene = new THREE.Scene();
         scene.fog = new THREE.Fog(0x050505, 2000, 3500);
