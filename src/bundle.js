@@ -1196,11 +1196,11 @@ function UFO(scene, location, camera) {
 
     this.rocketShip.name = "rocketShip"
 
-    mtlLoader.load('../../images/rocketFire.mtl', materials => {
+    mtlLoader.load('images/rocketFire.mtl', materials => {
         materials.preload();
         const objLoader = new three_examples_jsm_loaders_OBJLoader__WEBPACK_IMPORTED_MODULE_2__["OBJLoader"]();
         objLoader.setMaterials(materials);
-        objLoader.load('../../images/rocketFire.obj', obj => {
+        objLoader.load('images/rocketFire.obj', obj => {
             // obj.rotateX(-3.5708);
             // obj.rotateY(3.1);
             obj.scale.set(.06, .06, .06);
