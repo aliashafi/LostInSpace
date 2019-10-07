@@ -15,11 +15,11 @@ function UFO(scene, location, camera) {
 
     
 
-    mtlLoader.load('../../images/RocketShipMaterial.mtl', materials => {
+    mtlLoader.load('images/RocketShipMaterial.mtl', materials => {
         materials.preload();
         const objLoader = new OBJLoader();
         objLoader.setMaterials(materials);
-        objLoader.load('../../images/RocketShip.obj', obj => {
+        objLoader.load('images/RocketShip.obj', obj => {
             // obj.rotateX(-3.5708);
             obj.rotateY(-3.1);
             obj.scale.set(.06,.06,.06);

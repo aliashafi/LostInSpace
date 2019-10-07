@@ -11,11 +11,11 @@ function getRandomInt(max) {
 function PatrickStar(scene) {
     this.PatrickStar = new THREE.Group()
     const mtlLoader = new MTLLoader();
-    mtlLoader.load('../../images/Patrick.mtl', materials => {
+    mtlLoader.load('images/Patrick.mtl', materials => {
         materials.preload();
         const objLoader = new OBJLoader();
         objLoader.setMaterials(materials);
-        objLoader.load('../../images/Patrick.obj', obj => {
+        objLoader.load('images/Patrick.obj', obj => {
             // obj.rotateX(-3.5708);
             obj.rotateY(-3.1);
             // obj.scale.set(.06, .06, .06);
