@@ -3,6 +3,10 @@ import { TweenMax, Power2, TimelineLite, TimelineMax, Expo } from "gsap/TweenMax
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 
 function PatrickStar(scene) {
     this.PatrickStar = new THREE.Group()
@@ -15,12 +19,13 @@ function PatrickStar(scene) {
             // obj.rotateX(-3.5708);
             obj.rotateY(-3.1);
             // obj.scale.set(.06, .06, .06);
-            obj.position.set(10,10,10);
+            obj.position.set(getRandomInt(100), getRandomInt(100), getRandomInt(100));
             this.PatrickStar.add(obj)
 
         });
     });
-    this.PatrickStar.position.set(-40, -90, 0)
+    this.PatrickStar.name = "patrickStar"
+    this.PatrickStar.position.set(getRandomInt(500), getRandomInt(500), getRandomInt(500))
 
     scene.add(this.PatrickStar)
     // let pos = 

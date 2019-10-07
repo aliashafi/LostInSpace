@@ -77,7 +77,7 @@ function UFO(scene, location, camera) {
         let collidableMeshList = scene.children
         collidableMeshList = collidableMeshList.filter(subj => subj.name !== "stars")
         let rocketShip = scene.getObjectByName('cube');
-        let originPoint = new THREE.Vector3(w[0], location[1], location[2])
+        let originPoint = new THREE.Vector3([0], location[1], location[2])
         // let originPoint = this.rocketShip.position.clone(); 
         // console.log(originPoint)
 
@@ -96,9 +96,7 @@ function UFO(scene, location, camera) {
         }
         
         if (collisionResults.length > 0){
-            console.log("collision")
-            // debugger
-            
+            console.log("collision")            
             // this.rocketShip.position.set(location[0] -5 , location[1] -5, location[2] -5)
             // this.fireShip.position.set(location[0] -5 , location[1] -5, location[2] -5)
         }else{
@@ -111,16 +109,47 @@ function UFO(scene, location, camera) {
 
     
 
-    this.updateRotation = function (rotationX, rotationY, rotationZ) {
-        this.fireShip.rotateX(rotationX)
-        this.fireShip.rotateY(rotationY)
-        this.fireShip.rotateZ(rotationZ)
-        this.rocketShip.rotateX(rotationX);
-        this.rocketShip.rotateY(rotationY);
-        this.rocketShip.rotateZ(rotationZ);
+    this.updateRotation = function (rotationX, rotationY, rotationZ, reset) {
+        if (reset){
+            this.fireShip.rotation.x = 0;
+            this.fireShip.rotation.y = 0;
+            this.fireShip.rotation.z = 0;
+            this.rocketShip.rotation.x = 0;
+            this.rocketShip.rotation.y = 0;
+            this.rocketShip.rotation.z = 0;
+        }else{
+            this.fireShip.rotateX(rotationX)
+            this.fireShip.rotateY(rotationY)
+            this.fireShip.rotateZ(rotationZ)
+            this.rocketShip.rotateX(rotationX);
+            this.rocketShip.rotateY(rotationY);
+            this.rocketShip.rotateZ(rotationZ);
+        }
+        
+    }
+
+    function distanceBtweenPoints(obj1, obj2){
+        let x1 = obj1.position.x
+        let x2 = obj2.position.x
+        let y1 = obj1.position.y
+        let y2 = obj2.position.y
+        let z1 = obj1.position.z
+        let z2 = obj2.position.z
+
+        return Math.sqrt( Math.pow( (x2 - x1) , 2 ) + Math.pow( (y2 - y1) , 2 ) + Math.pow( (z2 - z1) , 2 ) )
     }
 
     this.update = function (time) {
+        let patrick = scene.getObjectByName("patrickStar");
+        let dist = distanceBtweenPoints(patrick, this.rocketShip)
+        if (dist < 40){
+            document.querySelector(".start-modal").style.visibility = "visible";
+            document.getElementById("message1").innerHTML = "YOU FOUND PATRICK!!!"
+            document.getElementById("message2").innerHTML = "GREAT JOB"
+            document.getElementById("message3").innerHTML = ""
+            document.getElementById("play-again").style.visibility = "visible"
+            
+        }
         if (Math.floor(time) % 2 === 0){
             this.fireShip.visible = true;
         }else{
