@@ -1424,6 +1424,11 @@ document.getElementById("btn-yes").addEventListener("click", () => {
 
 })
 
+document.getElementById("btn-no").addEventListener("click", () => {
+    document.querySelector(".start-modal").style.visibility = "hidden";
+    document.querySelector("#btn-no").style.visibility = "hidden";
+    document.querySelector("#btn-yes").style.visibility = "hidden";
+})
 
 
 document.getElementById("play").addEventListener("click", () => {
