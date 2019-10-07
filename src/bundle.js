@@ -100,7 +100,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sceneSubjects_earthPlanet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sceneSubjects/earthPlanet */ "./js/sceneSubjects/earthPlanet.js");
 /* harmony import */ var _sceneSubjects_starSubjects__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./sceneSubjects/starSubjects */ "./js/sceneSubjects/starSubjects.js");
 /* harmony import */ var _sceneSubjects_planetSubjects_orbitingPlanet__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/orbitingPlanet */ "./js/sceneSubjects/planetSubjects/orbitingPlanet.js");
-/* harmony import */ var _sceneSubjects_planetSubjects_SaturnPlanet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/SaturnPlanet */ "./js/sceneSubjects/planetSubjects/SaturnPlanet.js");
+/* harmony import */ var _sceneSubjects_planetSubjects_saturnPlanet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/saturnPlanet */ "./js/sceneSubjects/planetSubjects/saturnPlanet.js");
 /* harmony import */ var _sceneSubjects_planetSubjects_mercuryPlanet__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/mercuryPlanet */ "./js/sceneSubjects/planetSubjects/mercuryPlanet.js");
 /* harmony import */ var _sceneSubjects_planetSubjects_venusPlanet__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/venusPlanet */ "./js/sceneSubjects/planetSubjects/venusPlanet.js");
 /* harmony import */ var _sceneSubjects_planetSubjects_marsPlanet__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./sceneSubjects/planetSubjects/marsPlanet */ "./js/sceneSubjects/planetSubjects/marsPlanet.js");
@@ -222,7 +222,7 @@ function SceneManager (canvas){
             new _sceneSubjects_earthPlanet__WEBPACK_IMPORTED_MODULE_2__["default"](scene),
             new _sceneSubjects_starSubjects__WEBPACK_IMPORTED_MODULE_3__["default"](scene),
             new _sceneSubjects_planetSubjects_orbitingPlanet__WEBPACK_IMPORTED_MODULE_4__["default"](scene),
-            new _sceneSubjects_planetSubjects_SaturnPlanet__WEBPACK_IMPORTED_MODULE_5__["default"](scene),
+            new _sceneSubjects_planetSubjects_saturnPlanet__WEBPACK_IMPORTED_MODULE_5__["default"](scene),
             new _sceneSubjects_planetSubjects_mercuryPlanet__WEBPACK_IMPORTED_MODULE_6__["default"](scene),
             new _sceneSubjects_planetSubjects_venusPlanet__WEBPACK_IMPORTED_MODULE_7__["default"](scene),
             new _sceneSubjects_planetSubjects_marsPlanet__WEBPACK_IMPORTED_MODULE_8__["default"](scene),
@@ -534,73 +534,6 @@ function PatrickStar(scene) {
     }
 }
 /* harmony default export */ __webpack_exports__["default"] = (PatrickStar);
-
-/***/ }),
-
-/***/ "./js/sceneSubjects/planetSubjects/SaturnPlanet.js":
-/*!*********************************************************!*\
-  !*** ./js/sceneSubjects/planetSubjects/SaturnPlanet.js ***!
-  \*********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap/TweenMax */ "./node_modules/gsap/TweenMax.js");
-
-
-
-
-
-function SaturnPlanet(scene) {
-
-    ///surface
-    let geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](7, 16, 16);
-    let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({});
-    material.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/saturnmap.jpg');
-
-    let mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
-    mesh.position.set(20, 0, 0);
-
-    ///Ring
-    let geometry2 = new three__WEBPACK_IMPORTED_MODULE_0__["RingGeometry"](8, 15, 40);
-    let material2 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({ side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"] });
-    material2.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/saturnringcolor.jpg');
-    let ring = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry2, material2);
-    ring.position.set(0, 0, 0);
-
-    let geometry1 = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](0.2, 32, 32)
-    let material1 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({
-        side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
-        opacity: 0.8,
-        transparent: true,
-        depthWrite: false,
-    })
-
-
-    this.t1 = new gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__["TweenMax"]({ paused: false })
-
-    ring.rotateX(2);
-    mesh.add(ring)
-    scene.add(mesh);
-
-    var r = 200;
-    var theta = 0;
-    var dTheta = 2 * Math.PI / 10000;
-    
-   
-    this.update = function (time) {
-        // const scale = Math.sin(time) + 2;
-        mesh.rotateY(.004)
-        // mesh.translateX(.25);
-        theta += dTheta;
-        mesh.position.x = r * Math.cos(theta);
-        mesh.position.z = r * Math.sin(theta);
-        
-    }
-}
-/* harmony default export */ __webpack_exports__["default"] = (SaturnPlanet);
 
 /***/ }),
 
@@ -949,6 +882,73 @@ function PlutoPlanet(scene) {
 
 
 
+
+/***/ }),
+
+/***/ "./js/sceneSubjects/planetSubjects/saturnPlanet.js":
+/*!*********************************************************!*\
+  !*** ./js/sceneSubjects/planetSubjects/saturnPlanet.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap/TweenMax */ "./node_modules/gsap/TweenMax.js");
+
+
+
+
+
+function SaturnPlanet(scene) {
+
+    ///surface
+    let geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](7, 16, 16);
+    let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({});
+    material.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/saturnmap.jpg');
+
+    let mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
+    mesh.position.set(20, 0, 0);
+
+    ///Ring
+    let geometry2 = new three__WEBPACK_IMPORTED_MODULE_0__["RingGeometry"](8, 15, 40);
+    let material2 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({ side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"] });
+    material2.map = three__WEBPACK_IMPORTED_MODULE_0__["ImageUtils"].loadTexture('images/saturnringcolor.jpg');
+    let ring = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry2, material2);
+    ring.position.set(0, 0, 0);
+
+    let geometry1 = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](0.2, 32, 32)
+    let material1 = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({
+        side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
+        opacity: 0.8,
+        transparent: true,
+        depthWrite: false,
+    })
+
+
+    this.t1 = new gsap_TweenMax__WEBPACK_IMPORTED_MODULE_1__["TweenMax"]({ paused: false })
+
+    ring.rotateX(2);
+    mesh.add(ring)
+    scene.add(mesh);
+
+    var r = 200;
+    var theta = 0;
+    var dTheta = 2 * Math.PI / 10000;
+    
+   
+    this.update = function (time) {
+        // const scale = Math.sin(time) + 2;
+        mesh.rotateY(.004)
+        // mesh.translateX(.25);
+        theta += dTheta;
+        mesh.position.x = r * Math.cos(theta);
+        mesh.position.z = r * Math.sin(theta);
+        
+    }
+}
+/* harmony default export */ __webpack_exports__["default"] = (SaturnPlanet);
 
 /***/ }),
 
