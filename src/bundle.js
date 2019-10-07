@@ -181,6 +181,7 @@ function SceneManager (canvas){
 
     this.reset = function() {
         this.location = [10, 10, 100]
+        RocketShip.updateRotation(0,0,0,true)
     }
 
     function buildScene() {
@@ -1271,13 +1272,23 @@ function UFO(scene, location, camera) {
 
     
 
-    this.updateRotation = function (rotationX, rotationY, rotationZ) {
-        this.fireShip.rotateX(rotationX)
-        this.fireShip.rotateY(rotationY)
-        this.fireShip.rotateZ(rotationZ)
-        this.rocketShip.rotateX(rotationX);
-        this.rocketShip.rotateY(rotationY);
-        this.rocketShip.rotateZ(rotationZ);
+    this.updateRotation = function (rotationX, rotationY, rotationZ, reset) {
+        if (reset){
+            this.fireShip.rotation.x = 0;
+            this.fireShip.rotation.y = 0;
+            this.fireShip.rotation.z = 0;
+            this.rocketShip.rotation.x = 0;
+            this.rocketShip.rotation.y = 0;
+            this.rocketShip.rotation.z = 0;
+        }else{
+            this.fireShip.rotateX(rotationX)
+            this.fireShip.rotateY(rotationY)
+            this.fireShip.rotateZ(rotationZ)
+            this.rocketShip.rotateX(rotationX);
+            this.rocketShip.rotateY(rotationY);
+            this.rocketShip.rotateZ(rotationZ);
+        }
+        
     }
 
     function distanceBtweenPoints(obj1, obj2){
@@ -1423,6 +1434,10 @@ document.getElementById("play").addEventListener("click", () => {
 document.getElementById("play-again").addEventListener("click", () => {
     document.querySelector(".start-modal").style.visibility = "hidden"
     document.getElementById("play-again").style.visibility = "hidden"
+    sceneManager.reset()
+})
+
+document.querySelector(".reset-position").addEventListener("click", () => {
     sceneManager.reset()
 })
 

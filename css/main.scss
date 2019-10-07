@@ -73,6 +73,17 @@
     animation: slideIn 10s forwards;
 }
 
+.reset-position{
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: white;
+    font-size: 20px;
+    padding: 2%;
+    font-family: 'Geostar Fill';
+
+}
+
 .yes-no-btns{
     
     display: flex;
@@ -80,7 +91,7 @@
     margin-top: 22%;
 }
 
-#btn-no:hover, #btn-yes:hover, #play:hover, #play-again:hover{
+#btn-no:hover, #btn-yes:hover, #play:hover, #play-again:hover, .reset-position:hover{
     cursor: pointer;
     color: red;
 }

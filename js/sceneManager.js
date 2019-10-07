@@ -66,6 +66,7 @@ function SceneManager (canvas){
 
     this.reset = function() {
         this.location = [10, 10, 100]
+        RocketShip.updateRotation(0,0,0,true)
     }
 
     function buildScene() {

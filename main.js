@@ -98,6 +98,10 @@ document.getElementById("play-again").addEventListener("click", () => {
     sceneManager.reset()
 })
 
+document.querySelector(".reset-position").addEventListener("click", () => {
+    sceneManager.reset()
+})
+
 /// Add Event Listeners for keydown to change keyboard colors
 
 
