@@ -15,6 +15,7 @@ import PlutoPlanet from './sceneSubjects/planetSubjects/plutoPlanet'
 import UFO from './sceneSubjects/ufo'
 import MilkyWay from './sceneSubjects/milkyWay'
 import PatrickStar from './sceneSubjects/patrickStar'
+import { timingSafeEqual } from 'crypto';
 
 function SceneManager (canvas){
     const clock = new THREE.Clock();
@@ -61,6 +62,10 @@ function SceneManager (canvas){
             newRotation[2] = newRotation[2] - .02
         }
         this.location = newLocation;
+    }
+
+    this.reset = function() {
+        this.location = [10, 10, 100]
     }
 
     function buildScene() {
