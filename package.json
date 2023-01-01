@@ -25,9 +25,9 @@
     "three-orbitcontrols": "^2.108.1",
     "three.interaction": "^0.2.2",
     "three.js": "^0.77.1",
-    "webpack": "^4.41.0"
+    "webpack": "^5.75.0"
   },
   "devDependencies": {
-    "webpack-cli": "^3.3.9"
+    "webpack-cli": "^5.0.1"
   }
 }
